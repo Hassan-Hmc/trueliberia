@@ -58,11 +58,11 @@ const data = [
 const renderItem = ({item}) => {
   return (
     <View style={styles.card2}>
-<ImageBackground style={{width:'100%',height:450,resizeMode:'cover',borderTopLeftRadius:10,borderTopRightRadius:10}} source={{uri:item.url}}>
+      <ImageBackground style={{width:'100%',height:450,resizeMode:'cover',borderTopLeftRadius:10,borderTopRightRadius:10}} source={{uri:item.url}}>
 
-</ImageBackground>
+      </ImageBackground>
 
-</View>
+  </View>
   );
 };
 

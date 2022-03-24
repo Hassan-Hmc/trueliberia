@@ -30,50 +30,50 @@ console.log(props);
 
     return(
       <SafeAreaView edges={edges} style={baseStyle}>
-        <View style={{flexDirection: 'column', backgroundColor: '#00296B', flex: 1, padding: 20,marginBottom:-20,display:'flex',alignItems:'flex-start',paddingLeft:'20%',justifyContent:'flex-start',paddingTop:'55%'}}>
- <TouchableOpacity  activeOpacity={0.7}>
-<Text style={{fontSize:20,fontWeight:'400',color:'#fff'}}>
-  Home
-</Text>
-  </TouchableOpacity>        
+      <View style={{flexDirection: 'column', backgroundColor: '#00296B', flex: 1, padding: 20,marginBottom:-20,display:'flex',alignItems:'flex-start',paddingLeft:'20%',justifyContent:'flex-start',paddingTop:'55%'}}>
+          <TouchableOpacity activeOpacity={0.7}>
+              <Text style={{fontSize:20,fontWeight:'400',color:'#fff'}}>
+                  Home
+              </Text>
+          </TouchableOpacity>
 
 
-  <TouchableOpacity activeOpacity={0.7}>
-  
-<Text style={{fontSize:20,fontWeight:'400',color:'#fff',marginTop:25}}>
-  Search
-</Text>
-</TouchableOpacity>
+          <TouchableOpacity activeOpacity={0.7}>
 
-<TouchableOpacity activeOpacity={0.7}>
-<Text style={{fontSize:20,fontWeight:'400',color:'#fff',marginTop:25}}>
-  Business
-</Text>
-</TouchableOpacity>
+              <Text style={{fontSize:20,fontWeight:'400',color:'#fff',marginTop:25}}>
+                  Search
+              </Text>
+          </TouchableOpacity>
 
-
-
-<TouchableOpacity activeOpacity={0.7}>
-  <Text style={{fontSize:20,fontWeight:'400',color:'#fff',marginTop:25}}>
-  Promos
-</Text>
-</TouchableOpacity>
-
-<TouchableOpacity activeOpacity={0.7}>
-<Text style={{fontSize:20,fontWeight:'400',color:'#fff',marginTop:25}}>
-  Places
-</Text>
-</TouchableOpacity>
+          <TouchableOpacity activeOpacity={0.7}>
+              <Text style={{fontSize:20,fontWeight:'400',color:'#fff',marginTop:25}}>
+                  Business
+              </Text>
+          </TouchableOpacity>
 
 
-<TouchableOpacity activeOpacity={0.7}>
-<Text style={{fontSize:20,fontWeight:'400',color:'#fff',marginTop:25}}>
-  News
-</Text>
-</TouchableOpacity>
 
-         </View>
-      </SafeAreaView>
+          <TouchableOpacity activeOpacity={0.7}>
+              <Text style={{fontSize:20,fontWeight:'400',color:'#fff',marginTop:25}}>
+                  Promos
+              </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity activeOpacity={0.7}>
+              <Text style={{fontSize:20,fontWeight:'400',color:'#fff',marginTop:25}}>
+                  Places
+              </Text>
+          </TouchableOpacity>
+
+
+          <TouchableOpacity activeOpacity={0.7}>
+              <Text style={{fontSize:20,fontWeight:'400',color:'#fff',marginTop:25}}>
+                  News
+              </Text>
+          </TouchableOpacity>
+
+      </View>
+  </SafeAreaView>
     )
   }
 
@@ -102,101 +102,101 @@ const item_Details = (props) => {
 
   return (
     <SafeAreaProvider>
-      <Drawer open={openDrawer} toggleDrawer={toggleDrawer}>
-        <SafeAreaView style={styles.safeArea}>
-          <ScrollView>
+     <Drawer open={openDrawer} toggleDrawer={toggleDrawer}>
+         <SafeAreaView style={styles.safeArea}>
+             <ScrollView>
 
-          <View style={styles.container} >
-           <View style={styles.nav}>
+                 <View style={styles.container}>
+                     <View style={styles.nav}>
 
-<TouchableOpacity activeOpacity={0.7} onPress={()=>props.navigation.navigate('updateprofile')}>
-<Image style={{width:45,height:45,borderRadius:60}} source={{uri:'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8cHJvZmlsZXxlbnwwfHwwfHw%3D&w=1000&q=80'}} >
+                         <TouchableOpacity activeOpacity={0.7} onPress={()=>props.navigation.navigate('updateprofile')}>
+                             <Image style={{width:45,height:45,borderRadius:60}} source={{uri:'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8cHJvZmlsZXxlbnwwfHwwfHw%3D&w=1000&q=80'}}>
 
-</Image>
-</TouchableOpacity>
-
-
-<Text style={{fontSize:20,fontWeight:'bold',color:'#fff'}}>
-  Trueliberia
-</Text>
+                             </Image>
+                         </TouchableOpacity>
 
 
-<TouchableOpacity onPress={()=>toggleDrawer()} activeOpacity={0.7}>
-<Icon name="bars" size={26}  color="#fff" />
-
-</TouchableOpacity>
-           </View>
+                         <Text style={{fontSize:20,fontWeight:'bold',color:'#fff'}}>
+                             Trueliberia
+                         </Text>
 
 
+                         <TouchableOpacity onPress={()=>toggleDrawer()} activeOpacity={0.7}>
+                             <Icon name="bars" size={26} color="#fff" />
 
-           <View style={{width:'100%',display:'flex',alignItems:'flex-start',justifyContent:'center',marginTop:-120,height:490,zIndex:0}}>
-               <MyCarouselitem />
-
-            </View>
+                         </TouchableOpacity>
+                     </View>
 
 
 
-<View style={styles.heading}>
-<View>
-<Text style={{fontSize:20,fontWeight:'bold',color:'#00296B'}}>
-        Farmhouse Kitchen
-    </Text>
-    <Text style={{fontSize:15,fontWeight:'600',color:'#CCCCCC'}}>
-        20 Street sinkor
-    </Text>
-    <Text style={{fontSize:15,fontWeight:'700',color:'#F21010'}}>
-        Restorant
-    </Text>
-</View>
+                     <View style={{width:'100%',display:'flex',alignItems:'flex-start',justifyContent:'center',marginTop:-120,height:490,zIndex:0}}>
+                         <MyCarouselitem />
+
+                     </View>
 
 
 
-<Text style={{fontSize:20,fontWeight:'bold',color:'#1FDB5F'}}>
-    4.5
-</Text>
-</View>
+                     <View style={styles.heading}>
+                         <View>
+                             <Text style={{fontSize:20,fontWeight:'bold',color:'#00296B'}}>
+                                 Farmhouse Kitchen
+                             </Text>
+                             <Text style={{fontSize:15,fontWeight:'600',color:'#CCCCCC'}}>
+                                 20 Street sinkor
+                             </Text>
+                             <Text style={{fontSize:15,fontWeight:'700',color:'#F21010'}}>
+                                 Restorant
+                             </Text>
+                         </View>
 
 
 
-
-<View style={{width:'90%'}}>
-
-<ReadMore numberOfLines={3} style={styles.textStyle}>
-          {
-            "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum"
-          }
-        </ReadMore>
-<View style={{width:'100%',height:150}}>
-<Text style={{fontSize:16,color:'#000',fontWeight:'500'}}>
-        Features & Animations
-    </Text>
-
-    <Text style={{color:'#00296B',fontSize:13}}>
-        OutDoor Steaking , Car Parking , Takes Reservation , allow walking , Great For kids ,Wifi Available
-    </Text>
-</View>
-</View>
+                         <Text style={{fontSize:20,fontWeight:'bold',color:'#1FDB5F'}}>
+                             4.5
+                         </Text>
+                     </View>
 
 
 
 
+                     <View style={{width:'90%'}}>
 
-          </View>
+                         <ReadMore numberOfLines={3} style={styles.textStyle}>
+                             {
+                             "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum"
+                             }
+                         </ReadMore>
+                         <View style={{width:'100%',height:150}}>
+                             <Text style={{fontSize:16,color:'#000',fontWeight:'500'}}>
+                                 Features & Animations
+                             </Text>
 
-          </ScrollView>
+                             <Text style={{color:'#00296B',fontSize:13}}>
+                                 OutDoor Steaking , Car Parking , Takes Reservation , allow walking , Great For kids ,Wifi Available
+                             </Text>
+                         </View>
+                     </View>
 
-<View style={{width:'100%',height:65,backgroundColor:'#fff',position:'absolute',bottom:0,display:'flex',alignItems:'center',justifyContent:'center'}}>
 
-<TouchableOpacity activeOpacity={0.7} style={{width:'70%',height:45,backgroundColor:'#FDC500',display:'flex',alignItems:'center',justifyContent:'center',marginTop:-5}}>
-    <Text style={{fontSize:15,color:'#000',fontWeight:'400'}}>
-        Get Direction
-    </Text>
-</TouchableOpacity>
 
-</View>
-        </SafeAreaView>
-      </Drawer>
-    </SafeAreaProvider>
+
+
+                 </View>
+
+             </ScrollView>
+
+             <View style={{width:'100%',height:65,backgroundColor:'#fff',position:'absolute',bottom:0,display:'flex',alignItems:'center',justifyContent:'center'}}>
+
+                 <TouchableOpacity activeOpacity={0.7} style={{width:'70%',height:45,backgroundColor:'#FDC500',display:'flex',alignItems:'center',justifyContent:'center',marginTop:-5}}>
+                     <Text style={{fontSize:15,color:'#000',fontWeight:'400'}}>
+                         Get Direction
+                     </Text>
+                 </TouchableOpacity>
+
+             </View>
+         </SafeAreaView>
+     </Drawer>
+ </SafeAreaProvider>
   );
 };
 
@@ -205,7 +205,10 @@ const styles = StyleSheet.create({
     flex: 1
   },
   container: {
-    flex: 1, flexDirection: 'column', justifyItems: 'center', alignItems: 'center',
+    flex: 1,
+    flexDirection: 'column',
+    justifyItems: 'center',
+    alignItems: 'center',
     backgroundColor: '#fff'
   },
   text: {

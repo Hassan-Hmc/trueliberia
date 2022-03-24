@@ -7,7 +7,7 @@ import {
   View,
   Image,
   TouchableOpacity,
-  ImageBackground,TextInput, ScrollView
+  TextInput, ScrollView
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -18,63 +18,55 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 function UpdateProfile(props) {
 
 return(
-  
-  
   <View style={styles.container}>
-<TouchableOpacity onPress={()=>props.navigation.navigate('home')} style={{position:'absolute',left:10,top:15}}>
-<Icon name="arrow-left-thin" size={35} color="#000"  />
-</TouchableOpacity>    
-<Image style={{width:120,height:120,borderRadius:100,borderWidth:7,borderColor:'#FDC500',resizeMode:'cover'}} source={{uri:'https://external-preview.redd.it/ICikkd5y_XXXZL-lxbaOG6l-CTwnMiyUV9Wjbcaw7mE.jpg?width=640&crop=smart&auto=webp&s=883ef6f426b62c3b99e9b6cf5404d4d8c78db277'}}>
+      <TouchableOpacity onPress={()=>props.navigation.navigate('home')} style={{position:'absolute',left:10,top:15}}>
+          <Icon name="arrow-left-thin" size={35} color="#000" />
+      </TouchableOpacity>
+      <Image style={{width:120,height:120,borderRadius:100,borderWidth:7,borderColor:'#FDC500',resizeMode:'cover'}} source={{uri:'https://external-preview.redd.it/ICikkd5y_XXXZL-lxbaOG6l-CTwnMiyUV9Wjbcaw7mE.jpg?width=640&crop=smart&auto=webp&s=883ef6f426b62c3b99e9b6cf5404d4d8c78db277'}}>
 
-</Image>
-<Text style={{fontSize:23,color:'#000',marginTop:20}}>
-    John Doe 
-</Text>
-
-
-
-
-<TextInput  style={styles.input1} placeholder='John' placeholderTextColor={'#989898'} >
-
-
-</TextInput>
-
-
-
-<TextInput  style={styles.input} placeholder='Doe' placeholderTextColor={'#989898'} >
-
-
-</TextInput>
-
-
-
-<TextInput  style={styles.input} placeholder='Johnd@gmial.com' placeholderTextColor={'#989898'} >
-
-
-</TextInput>
-
-
-<TextInput  style={styles.input} placeholder='Password' placeholderTextColor={'#989898'} >
-
-
-</TextInput>
-
-
-<TouchableOpacity onPress={()=>props.navigation.navigate('home')}  activeOpacity={0.6} style={styles.button}>
-
-<Text style={styles.ButtonText}>
-    Update Profile
-</Text>
-
-</TouchableOpacity>
-
-    </View>
+      </Image>
+      <Text style={{fontSize:23,color:'#000',marginTop:20}}>
+          John Doe
+      </Text>
 
 
 
 
+      <TextInput style={styles.input1} placeholder='John' placeholderTextColor={'#989898'}>
 
 
+      </TextInput>
+
+
+
+      <TextInput style={styles.input} placeholder='Doe' placeholderTextColor={'#989898'}>
+
+
+      </TextInput>
+
+
+
+      <TextInput style={styles.input} placeholder='Johnd@gmial.com' placeholderTextColor={'#989898'}>
+
+
+      </TextInput>
+
+
+      <TextInput style={styles.input} placeholder='Password' placeholderTextColor={'#989898'}>
+
+
+      </TextInput>
+
+
+      <TouchableOpacity onPress={()=>props.navigation.navigate('home')} activeOpacity={0.6} style={styles.button}>
+
+          <Text style={styles.ButtonText}>
+              Update Profile
+          </Text>
+
+      </TouchableOpacity>
+
+  </View>
     )
 }
 
@@ -97,7 +89,9 @@ const styles = StyleSheet.create({
         marginTop:5,
         fontSize:15,
         paddingLeft:10,
-        borderTopWidth:0,borderLeftWidth:0,borderRightWidth:0,
+        borderTopWidth:0,
+        borderLeftWidth:0,
+        borderRightWidth:0,
         
       },
       input1:{
