@@ -7,6 +7,10 @@ import Home from '../screen/home';
 import UpdateProfile from '../screen/update_profile';
 import SearchDetails from '../screen/searchDetails';
 import item_Details from '../screen/item_details';
+import Map from '../screen/map';
+import MyCarousel from '../screen/slider';
+
+
 const Stack = createStackNavigator();
 
 function AppNavigation() {
@@ -22,12 +26,18 @@ function AppNavigation() {
             options={{
             ...TransitionPresets.SlideFromRightIOS,
           }}/>
-
+<Stack.Screen name="Map" component={Map} 
+            options={{
+            ...TransitionPresets.SlideFromRightIOS,
+          }}/>
           <Stack.Screen name="itemDetails" component={item_Details} 
             options={{
             ...TransitionPresets.SlideFromRightIOS,
           }}/>       
-
+ <Stack.Screen name="MyCarousel" component={MyCarousel} 
+            options={{
+            ...TransitionPresets.SlideFromRightIOS,
+          }}/> 
           <Stack.Screen name="searchDetails" component={SearchDetails} 
              options={{
               ...TransitionPresets.SlideFromRightIOS,

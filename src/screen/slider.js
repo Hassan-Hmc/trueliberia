@@ -1,78 +1,33 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef,useEffect} from 'react';
 import {Text, View, Dimensions, Image,StyleSheet,TouchableOpacity} from 'react-native';
 import Carousel, {Pagination} from 'react-native-snap-carousel';
-
+import ContentLoader, { Rect, Circle, Path } from "react-content-loader/native"
 export const SLIDER_WIDTH = Dimensions.get('window').width + 30;
 export const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.8);
 
-const data = [
-  {
-    id: 1,
-    name: 'Farmhouse kitchen',
-    url: 'https://www.nicepng.com/png/full/54-545831_plate-of-food-png-eat-to-live-diet.png',
-    Rating:4.4,
-    name2:'20 street snkoor 3',
-
-  },
-  {
-    id: 2,
-    name: 'Farmhouse ',
-    url: 'https://www.freepnglogos.com/uploads/food-png/fast-food-transparent-png-pictures-icons-and-png-18.png',
-    name2:'20 street snkoor 2',
-    Rating:3.5
-
-    },
-  {
-    id: 3,
-    name: 'kitchen',
-    url: 'https://www.pngfind.com/pngs/m/44-443237_download-fast-food-hd-png-transparent-png.png',
-    name2:'20 street snkoor 3',
-    Rating:2.4
-  },
-  {
-    id: 4,
-    name: 'Farmhouse kitchen',
-    url: 'https://img.favpng.com/4/15/22/french-fries-fast-food-vegetarian-cuisine-breakfast-hamburger-png-favpng-ZHvf1FWw9tPPJG3WchrWnUif0.jpg',
-    Rating:4.4,
-    name2:'20 street snkoor 3',
-
-  },
-  {
-    id: 5,
-    name: 'Farmhouse ',
-    url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTGUDxr0nK2O4lnpkN6lSbaq0fCcujnmKTe8xRNiFAel5h4QFjBtXVDT-yltHcE9fHD2QM&usqp=CAU',
-    Rating:3.5,
-    name2:'20 street snkoor 3',
 
 
-    },
-  {
-    id: 6,
-    name: 'kitchen',
-    url: 'https://w7.pngwing.com/pngs/22/746/png-transparent-kfc-fully-loaded-meal-screenshot-fried-chicken-fast-food-kfc-buffalo-wing-chicken-sandwich-kfc-food-recipe-chicken-meat.png',
-    name2:'20 street snkoor 3',
-    Rating:2.4
-  },
-];
+const renderItem = ({item},props) => {
 
-const renderItem = ({item}) => {
+
   return (
+    
     <View style={styles.card2}>
-<TouchableOpacity activeOpacity={1}>
-<Image style={{width:'100%',height:160,resizeMode:'cover',borderTopLeftRadius:10,borderTopRightRadius:10}} source={{uri:item.url}}>
+<TouchableOpacity onPress={()=>{props.props.navigation.navigate('itemDetails',{data:item})}} activeOpacity={1}>
+<Image style={{width:'100%',height:160,resizeMode:'cover',borderTopLeftRadius:10,borderTopRightRadius:10}} source={{uri:item.image}}>
 
 </Image>
 <View style={{width:'100%',height:60,display:'flex',alignItems:'center',justifyContent:'space-between',flexDirection:'row',paddingHorizontal:10}}>
 <View>
   <Text style={{fontSize:14,fontWeight:'bold',color:'#00296B'}}>
-      Echo
+     {item.name}
   </Text>
   <Text style={{fontSize:12,color:'grey'}}>
-    {item.name2}
+    {item.slug}
   </Text>
 </View>
 <View>
-  <Text style={{fontWeight:'bold',color:'#1FDB5F',fontSize:15}}>{item.Rating}</Text>
+  <Text style={{fontWeight:'bold',color:'#1FDB5F',fontSize:15}}>{item.rating}</Text>
 </View>
 </View>
 </TouchableOpacity>
@@ -80,21 +35,55 @@ const renderItem = ({item}) => {
   );
 };
 
-const MyCarousel = () => {
+const MyCarousel = (props) => {
   const [index, setIndex] = useState(0);
   const isCarousel = useRef(null);
+  
+  const [feature_data, setfeature_data] = useState([])
+
+
+
+
+  useEffect(()=>{
+    as()
+    },[])
+    const as= async ()=>{
+    
+    
+    
+      fetch('https://www.trueliberia.com/api/businesses?featured=1',{
+        method:'GET'
+      })
+      .then( async (result)=> {
+      // handle the response
+      const json= await result.json()
+      setfeature_data(json)
+      })
+      .catch((e)=> {
+      // handle the error
+      //   console.log("no>>>>>>>>>>>>>",);
+      
+      });
+    
+    }
+
+
   return (
+    <>
+      {feature_data.length>0
+      ?
     <View style={{marginVertical: 10}}>
+      
       <Carousel
         ref={isCarousel}
-        data={data}
-        renderItem={renderItem}
+        data={feature_data}
+        renderItem={(item)=>renderItem(item,props)}
         sliderWidth={SLIDER_WIDTH}
         itemWidth={ITEM_WIDTH}
         onSnapToItem={index => setIndex(index)}
-      />
+        />
       <Pagination
-        dotsLength={data.length}
+        dotsLength={feature_data.length}
         activeDotIndex={index}
         carouselRef={isCarousel}
         dotStyle={{
@@ -104,7 +93,7 @@ const MyCarousel = () => {
           marginHorizontal: 0,
           backgroundColor: '#C4C4C4',
           marginLeft:-5
-  
+          
         }}
         tappableDots={true}
         inactiveDotStyle={{
@@ -113,8 +102,27 @@ const MyCarousel = () => {
         }}
         inactiveDotOpacity={0.1}
         inactiveDotScale={0.6}
-      />
-    </View>
+        />
+
+      </View>
+      :
+      // <View>
+      //   {console.log("awawaw")}
+      //   <Text style={{color:'black'}}>hjbjhbhj</Text>
+      // </View>
+      
+      <View  style={{width:'100%',display:'flex',justifyContent:'center',alignItems:'center',flexDirection:'column'}}>
+      {console.log("gh>>>")}
+                                  <ContentLoader height="230" width="90%"  >
+                                  
+                                  <Rect x="15" y="15" rx="6" ry="6" width="350" height="25" />
+                                
+                                  <Rect x="15" y="50" rx="2" ry="2" width="350" height="150" />
+      
+                                </ContentLoader>
+                                  </View>
+    }
+    </>
   );
 };
 

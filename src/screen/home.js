@@ -1,6 +1,6 @@
 
 
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import {
   ScrollView,
   StatusBar,
@@ -10,12 +10,14 @@ import {
   TextInput,
   View,
   Image,
-  ImageBackground
+  ImageBackground,
+  RefreshControl
 } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import MenuDrawer from 'react-native-side-drawer'
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import MyCarousel from './slider'
+import ContentLoader, { Rect, Circle, Path } from "react-content-loader/native"
 
 const Drawer = (props) => {
   const overlay = false
@@ -24,6 +26,8 @@ const Drawer = (props) => {
   const drawerContent = () => {
     const edges = position == 'right' ? ['bottom', 'top', 'right'] : ['bottom', 'top', 'left']
     const baseStyle = {flex: 1}
+
+    
 
     return(
       <SafeAreaView edges={edges} style={baseStyle}>
@@ -89,7 +93,146 @@ const Drawer = (props) => {
 }
 const Home = (props) => {
   const [openDrawer, setDrawerOpen] = useState(false)
+  const [cat_data, setcat_data] = useState([])
+  const [data, setdata] = useState([])
+  const [type, settype] = useState()
+  const [hj, sethj] = useState()
+  const [refreshing, setRefreshing] = useState(false)
 
+  const _onRefresh1 = () => {
+    setRefreshing(true);
+    fetch_cat_data()
+      
+    fetch_data()
+  
+  
+  };
+  const search_data=()=>{
+    console.log("vvvvvvv",type)
+
+    if (type) {
+      console.log("yes>>>>>>>>>>>>>>");
+      fetch_keyword_data(type) 
+    } else {
+      console.log("no>>>>>>>>>>>>>>");
+      fetch_data()
+
+    }
+    }
+  useEffect(()=>{
+
+    fetch_cat_data()
+
+      
+      fetch_data()
+      
+  
+
+console.log("run again>>>>>>>>>>>>>>>>>>>>>");
+
+    
+
+},[])
+
+
+const fetch_cat_data= async()=>{
+
+
+
+
+
+
+
+  // fetch  cat data
+
+  fetch('https://www.trueliberia.com/api/categories',{
+      method:'GET'
+  })
+  .then( async (result)=> {
+    // handle the response
+    const json= await result.json()
+    setcat_data(json)
+  
+
+  //   console.log("efwe",json);
+  })
+  .catch((e)=> {
+    // handle the error
+  //   console.log("no>>>>>>>>>>>>>",);
+  setRefreshing(false)
+
+  setRefreshing(false)
+
+  });
+
+
+
+
+  
+}
+
+
+const fetch_data= async()=>{
+
+
+
+
+    //fetch feature data
+
+    
+
+    fetch('https://www.trueliberia.com/api/businesses',{
+        method:'GET'
+    })
+    .then( async (result)=> {
+      // handle the response
+      const json= await result.json()
+      setdata(json)
+        setRefreshing(false)
+
+    //   console.log("efwe>>>",json);
+    })
+    .catch((e)=> {
+      // handle the error
+      // console.log("no>>>>>>>>>>>>>",e);
+          setRefreshing(false)
+
+    
+    });
+
+}
+
+
+const fetch_keyword_data= async(v)=>{
+
+
+
+
+
+
+
+  // fetch  keyword data
+
+  fetch(`https://www.trueliberia.com/api/businesses?s=${v}`,{
+      method:'GET'
+  })
+  .then( async (result)=> {
+    // handle the response
+    const json= await result.json()
+    setdata(json)
+  //   console.log("efwe",json);
+  })
+  .catch((e)=> {
+    // handle the error
+  //   console.log("no>>>>>>>>>>>>>",);
+  
+  });
+
+
+
+
+
+}
   const toggleDrawer = () => {
     setDrawerOpen(!openDrawer)
   }
@@ -121,8 +264,11 @@ const Home = (props) => {
     <SafeAreaProvider>
      <Drawer open={openDrawer} toggleDrawer={toggleDrawer}>
          <SafeAreaView style={styles.safeArea}>
-             <ScrollView>
-
+             <ScrollView          refreshControl={
+  <RefreshControl refreshing={refreshing}
+    onRefresh={_onRefresh1}tintColor="#F8852D"/>
+}>
+    
                  <View style={styles.container}>
                      <View style={styles.nav}>
 
@@ -147,9 +293,16 @@ const Home = (props) => {
 
                      <View style={styles.searchSection}>
                          <Icon style={styles.searchIcon} name="map-marker-alt" size={20} color="#000" />
-                         <TextInput value={search} style={styles.input} placeholder="Search here...." onChangeText={(searchString)=> {setSearch(searchString); setSearchTrue(true); }}
+                         <TextInput   onChangeText={(e)=>{settype(e)}}  style={styles.input} placeholder="Search here...."
                              // underlineColorAndroid="transparent"
                              />
+                             <TouchableOpacity onPress={()=>{        search_data()
+                                                }}>
+
+                               <Image resizeMode='contain' style={{width:19,height:40}} source={require('../screen/image/search.png')} >
+
+</Image>
+                             </TouchableOpacity>
                      </View>
                      <View style={{width:'80%',marginTop:10}}>
                          {search.length>0 && searchTrue?
@@ -157,7 +310,7 @@ const Home = (props) => {
                          if(i<7){ return( <View style={{width:'90%',paddingLeft:'10%',height:40,backgroundColor:'#fff',display:'flex',alignItems:'flex-start',justifyContent:'center',marginTop:0}} key={i} onTouchEnd={()=>{setSearch(v.name); setSearchTrue(false); props.navigation.navigate('searchDetails',{val:v.name})}}>
 
                              <Text style={{fontWeight:'bold',color:'#00296B'}}>
-                                 {v.name}
+                                 {v.name}vdfj
                              </Text>
                      </View>
                      )
@@ -171,81 +324,51 @@ const Home = (props) => {
                  <View style={styles.newArrival}>
 
 
-                     <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-                         <ImageBackground style={styles.card1} imageStyle={{borderRadius:60,borderWidth:4,borderColor:'#FDC500'}} source={{uri:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRf6mB2G13MRN6LCNQye1dEmRlzKyKvhxZUtg&usqp=CAU'}}>
+                         {/* <ImageBackground style={styles.card1} imageStyle={{borderRadius:60,borderWidth:4,borderColor:'#FDC500'}} source={{uri:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRf6mB2G13MRN6LCNQye1dEmRlzKyKvhxZUtg&usqp=CAU'}}>
+                             <View>
+                             
+                             </View>
+                            </ImageBackground> */}
+
+
+<ScrollView horizontal={true} showsHorizontalScrollIndicator={true}>
+                        {cat_data.length>0?cat_data.map((v,i)=>{
+                          return(
+                              <TouchableOpacity activeOpacity={0.7} key={i}  onPress={()=>{props.navigation.navigate('searchDetails',{data:v.slug})}} >
+
+                                <ImageBackground style={styles.card} imageStyle={{borderRadius:60}} source={{uri:v.image}}>
                              <View>
 
                              </View>
                          </ImageBackground>
-
-
-
-
-                         <ImageBackground style={styles.card} imageStyle={{borderRadius:60}} source={{uri:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQafW5ADri1KrghIVikSJ3QPAy0V2RXBqUqLQ&usqp=CAU'}}>
-                             <View>
-
-                             </View>
-                         </ImageBackground>
-
-
-
-
-                         <ImageBackground style={styles.card} imageStyle={{borderRadius:60}} source={{uri:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRf6mB2G13MRN6LCNQye1dEmRlzKyKvhxZUtg&usqp=CAU'}}>
-                             <View>
-
-                             </View>
-                         </ImageBackground>
-
-
-
-
-
-                         <ImageBackground style={styles.card} imageStyle={{borderRadius:60}} source={{uri:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRf6mB2G13MRN6LCNQye1dEmRlzKyKvhxZUtg&usqp=CAU'}}>
-                             <View>
-
-                             </View>
-                         </ImageBackground>
+                              </TouchableOpacity>
+                            )
+                          })
+                          :
+                          
+                          <View  style={{width:'100%',display:'flex',justifyContent:'center',alignItems:'center',flexDirection:'column'}}>
+                     {console.log("gh>>>")}
+                     <ContentLoader 
+    speed={2}
+    width={'90%'}
+    height={70}
+    viewBox="0 0 400 160"
+    backgroundColor="#f3f3f3"
+    foregroundColor="#ecebeb"
+    {...props}
+    >
+    
+    <Circle cx="60" cy="60" r="60" />
+  </ContentLoader>
+                                                 </View>
+                        }
+                        </ScrollView>
 
 
 
 
 
-                         <ImageBackground style={styles.card} imageStyle={{borderRadius:60}} source={{uri:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRf6mB2G13MRN6LCNQye1dEmRlzKyKvhxZUtg&usqp=CAU'}}>
-                             <View>
 
-                             </View>
-                         </ImageBackground>
-
-
-
-
-                         <ImageBackground style={styles.card} imageStyle={{borderRadius:60}} source={{uri:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRf6mB2G13MRN6LCNQye1dEmRlzKyKvhxZUtg&usqp=CAU'}}>
-                             <View>
-
-                             </View>
-                         </ImageBackground>
-
-
-
-
-                         <ImageBackground style={styles.card} imageStyle={{borderRadius:60}} source={{uri:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRf6mB2G13MRN6LCNQye1dEmRlzKyKvhxZUtg&usqp=CAU'}}>
-                             <View>
-
-                             </View>
-                         </ImageBackground>
-
-
-
-
-                         <ImageBackground style={styles.card} imageStyle={{borderRadius:60}} source={{uri:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRf6mB2G13MRN6LCNQye1dEmRlzKyKvhxZUtg&usqp=CAU'}}>
-                             <View>
-
-                             </View>
-                         </ImageBackground>
-
-
-
-                     </ScrollView>
                  </View>
 
 
@@ -253,10 +376,11 @@ const Home = (props) => {
 
                  <View style={{width:'100%',display:'flex',alignItems:'flex-start',justifyContent:'center',marginTop:20,height:330}}>
                      <Text style={{fontSize:14,fontWeight:'bold',color:'#00296B',marginBottom:-10,marginLeft:'5%'}}>
-                         Hottest Place in
+                     Featured business
+
                      </Text>
 
-                     <MyCarousel />
+                     <MyCarousel props={props} />
 
                  </View>
 
@@ -264,104 +388,64 @@ const Home = (props) => {
 
                  <View style={{width:'100%',display:'flex',alignItems:'flex-start',justifyContent:'center',marginTop:-15}}>
                      <Text style={{fontSize:14,fontWeight:'bold',color:'#00296B',marginBottom:-10,marginLeft:'5%'}}>
-                         Featured business
+                     Hottest Place in
+
                      </Text>
 
-                     <View style={styles.card2}>
-                         <TouchableOpacity onPress={()=>props.navigation.navigate('itemDetails')} activeOpacity={0.7}>
-                             <Image style={{width:'100%',height:160,resizeMode:'cover',borderTopLeftRadius:10,borderTopRightRadius:10}} source={{uri:'https://d2cej47ganbxpf.cloudfront.net/media/filer_public/e0/50/e05064bd-0451-4b15-a1b4-4d14c15c11d2/screen_shot_2021-03-22_at_85449_am.png'}}>
 
-                             </Image>
-                             <View style={{width:'100%',height:60,display:'flex',alignItems:'center',justifyContent:'space-between',flexDirection:'row',paddingHorizontal:10}}>
-                                 <View>
-                                     <Text style={{fontSize:14,fontWeight:'bold',color:'#00296B'}}>
-                                         Echo
-                                     </Text>
-                                     <Text style={{fontSize:12,color:'grey'}}>
-                                         Solar beach marchat
-                                     </Text>
-                                 </View>
-                                 <View>
-                                     <Text style={{fontWeight:'bold',color:'#1FDB5F',fontSize:15}}>4.3</Text>
-                                 </View>
-                             </View>
-                         </TouchableOpacity>
-                     </View>
+                        {data.length>0?data.map((v,i)=>{
+                            return(
 
-
-
-
-
-                     <View style={styles.card2}>
-                         <TouchableOpacity onPress={()=>props.navigation.navigate('itemDetails')} activeOpacity={0.7}>
-                             <Image style={{width:'100%',height:160,resizeMode:'cover',borderTopLeftRadius:10,borderTopRightRadius:10}} source={{uri:'https://ar.rdcpix.com/7efd8fc5d2c1744ebf2ae922a0cec90cc-f3791207535od-w480_h360.jpg'}}>
-
-                             </Image>
-                             <View style={{width:'100%',height:60,display:'flex',alignItems:'center',justifyContent:'space-between',flexDirection:'row',paddingHorizontal:10}}>
-                                 <View>
-                                     <Text style={{fontSize:14,fontWeight:'bold',color:'#00296B'}}>
-                                         Echo
-                                     </Text>
-                                     <Text style={{fontSize:12,color:'grey'}}>
-                                         Solar beach marchat
-                                     </Text>
-                                 </View>
-                                 <View>
-                                     <Text style={{fontWeight:'bold',color:'#1FDB5F',fontSize:15}}>4.3</Text>
-                                 </View>
-                             </View>
-                         </TouchableOpacity>
-                     </View>
-
-
-
-
-
-                     <View style={styles.card2}>
-                         <TouchableOpacity onPress={()=>props.navigation.navigate('itemDetails')} activeOpacity={0.7}>
-                             <Image style={{width:'100%',height:160,resizeMode:'cover',borderTopLeftRadius:10,borderTopRightRadius:10}} source={{uri:'https://rentpath-res.cloudinary.com/$img_current/t_3x2_jpg_xl/t_unpaid/a213370dccc6991c9e2ff7bcb5e25117'}}>
-
-                             </Image>
-                             <View style={{width:'100%',height:60,display:'flex',alignItems:'center',justifyContent:'space-between',flexDirection:'row',paddingHorizontal:10}}>
-                                 <View>
-                                     <Text style={{fontSize:14,fontWeight:'bold',color:'#00296B'}}>
-                                         Echo
-                                     </Text>
-                                     <Text style={{fontSize:12,color:'grey'}}>
-                                         Solar beach marchat
-                                     </Text>
-                                 </View>
-                                 <View>
-                                     <Text style={{fontWeight:'bold',color:'#1FDB5F',fontSize:15}}>4.3</Text>
-                                 </View>
-                             </View>
-                         </TouchableOpacity>
-                     </View>
+                                <View key={i} style={styles.card2}>
+                                <TouchableOpacity onPress={()=>{props.navigation.navigate('itemDetails',{data:v})}} activeOpacity={0.7}>
+                                    <Image style={{width:'100%',height:160,resizeMode:'cover',borderTopLeftRadius:10,borderTopRightRadius:10}} source={{uri:v.image}}>
+                                    </Image>
+                                    <View style={{width:'100%',height:60,display:'flex',alignItems:'center',justifyContent:'space-between',flexDirection:'row',paddingHorizontal:10}}>
+                                        <View>
+                                            <Text style={{fontSize:14,fontWeight:'bold',color:'#00296B'}}>
+                                               {v.name}
+                                            </Text>
+                                            <Text style={{fontSize:12,color:'grey'}}>
+                                                {v.slug}
+                                            </Text>
+                                        </View>
+                                        <View>
+                                            <Text style={{fontWeight:'bold',color:'#1FDB5F',fontSize:15}}>{v.rating}</Text>
+                                        </View>
+                                    </View>
+                                </TouchableOpacity>
+                            </View>
+                            )
+                        }):
+                        
+                     <View  style={{width:'100%',display:'flex',justifyContent:'center',alignItems:'center',flexDirection:'column'}}>
+                     {console.log("gh>>>")}
+                                                 <ContentLoader height="280" width="90%"  >
+                                                 
+                                                 <Rect x="15" y="15" rx="6" ry="6" width="350" height="25" />
+                                               
+                                                 <Rect x="15" y="50" rx="2" ry="2" width="350" height="150" />
+                     
+                                               </ContentLoader>
+                                               <ContentLoader height="280" width="90%"  >
+                                                 
+                                                 <Rect x="15" y="15" rx="6" ry="6" width="350" height="25" />
+                                               
+                                                 <Rect x="15" y="50" rx="2" ry="2" width="350" height="150" />
+                     
+                                               </ContentLoader>
+                                               <ContentLoader height="280" width="90%"  >
+                                                 
+                                                 <Rect x="15" y="15" rx="6" ry="6" width="350" height="25" />
+                                               
+                                                 <Rect x="15" y="50" rx="2" ry="2" width="350" height="150" />
+                     
+                                               </ContentLoader>
+                                                 </View>
+                        }
 
 
 
-
-
-                     <View style={styles.card2}>
-                         <TouchableOpacity activeOpacity={0.7}>
-                             <Image style={{width:'100%',height:160,resizeMode:'cover',borderTopLeftRadius:10,borderTopRightRadius:10}} source={{uri:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRf6mB2G13MRN6LCNQye1dEmRlzKyKvhxZUtg&usqp=CAU'}}>
-
-                             </Image>
-                             <View style={{width:'100%',height:60,display:'flex',alignItems:'center',justifyContent:'space-between',flexDirection:'row',paddingHorizontal:10}}>
-                                 <View>
-                                     <Text style={{fontSize:14,fontWeight:'bold',color:'#00296B'}}>
-                                         Echo
-                                     </Text>
-                                     <Text style={{fontSize:12,color:'grey'}}>
-                                         Solar beach marchat
-                                     </Text>
-                                 </View>
-                                 <View>
-                                     <Text style={{fontWeight:'bold',color:'#1FDB5F',fontSize:15}}>4.3</Text>
-                                 </View>
-                             </View>
-                         </TouchableOpacity>
-                     </View>
 
 
 

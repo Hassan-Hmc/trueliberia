@@ -1,6 +1,6 @@
 
 
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import {
   ScrollView,
   StatusBar,
@@ -96,8 +96,10 @@ const item_Details = (props) => {
   const toggleDrawer = () => {
     setDrawerOpen(!openDrawer)
   }
-
- 
+const  data = props.route.params.data
+  useEffect(()=>{
+    console.log("awais>>>>>>>>>>>>>>>>>>>",data);
+    },[])
 
 
   return (
@@ -130,8 +132,7 @@ const item_Details = (props) => {
 
 
                      <View style={{width:'100%',display:'flex',alignItems:'flex-start',justifyContent:'center',marginTop:-120,height:490,zIndex:0}}>
-                         <MyCarouselitem />
-
+                         <MyCarouselitem img={data.image} />
                      </View>
 
 
@@ -139,20 +140,20 @@ const item_Details = (props) => {
                      <View style={styles.heading}>
                          <View>
                              <Text style={{fontSize:20,fontWeight:'bold',color:'#00296B'}}>
-                                 Farmhouse Kitchen
+                                {data.name}
                              </Text>
                              <Text style={{fontSize:15,fontWeight:'600',color:'#CCCCCC'}}>
-                                 20 Street sinkor
+                                 {data.slug}
                              </Text>
                              <Text style={{fontSize:15,fontWeight:'700',color:'#F21010'}}>
-                                 Restorant
+                                 {data.category}
                              </Text>
                          </View>
 
 
 
                          <Text style={{fontSize:20,fontWeight:'bold',color:'#1FDB5F'}}>
-                             4.5
+                             {data.rating}
                          </Text>
                      </View>
 
@@ -163,7 +164,7 @@ const item_Details = (props) => {
 
                          <ReadMore numberOfLines={3} style={styles.textStyle}>
                              {
-                             "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum"
+                                 data.description
                              }
                          </ReadMore>
                          <View style={{width:'100%',height:150}}>
@@ -187,7 +188,7 @@ const item_Details = (props) => {
 
              <View style={{width:'100%',height:65,backgroundColor:'#fff',position:'absolute',bottom:0,display:'flex',alignItems:'center',justifyContent:'center'}}>
 
-                 <TouchableOpacity activeOpacity={0.7} style={{width:'70%',height:45,backgroundColor:'#FDC500',display:'flex',alignItems:'center',justifyContent:'center',marginTop:-5}}>
+                 <TouchableOpacity activeOpacity={0.7} style={{width:'70%',height:45,backgroundColor:'#FDC500',display:'flex',alignItems:'center',justifyContent:'center',marginTop:-5}} onPress={()=>props.navigation.navigate('Map',{lati:data.latitude, long:data.longitude,name:data.name,image:data.image,rating:data.rating})}>
                      <Text style={{fontSize:15,color:'#000',fontWeight:'400'}}>
                          Get Direction
                      </Text>
@@ -257,7 +258,8 @@ const styles = StyleSheet.create({
   textStyle:{
       fontSize:15,
       paddingBottom:30,
-      lineHeight:20
+      lineHeight:20,
+      color:'black'
   }
 });
 

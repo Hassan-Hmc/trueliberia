@@ -1,6 +1,6 @@
 
 
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import {
   ScrollView,
   StatusBar,
@@ -10,12 +10,15 @@ import {
   TextInput,
   View,
   Image,
-  ImageBackground
+  ImageBackground,
+  RefreshControl
 } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import MenuDrawer from 'react-native-side-drawer'
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import MyCarousel from './slider'
+import ContentLoader, { Rect, Circle, Path } from "react-content-loader/native"
+import se from '../screen/image/search.png'
 
 const Drawer = (props) => {
 console.log(props);
@@ -90,9 +93,90 @@ console.log(props);
   );
 }
 const SearchDetails = (props) => {
-  console.log(props.route.params.val);
+  console.log("cwdwecewcwe>>>>>>>",props.props);
   const [openDrawer, setDrawerOpen] = useState(false)
+  const [cat_data, setcat_data] = useState([])
+  const [type, settype] = useState()
+  const [refreshing, setRefreshing] = useState(false)
+  const _onRefresh1 = () => {
+    setRefreshing(true);
+      
+    fetch_data()
+  
+  
+  };
 
+  const search_data=()=>{
+    console.log("vvvvvvv",type)
+
+    if (type) {
+      console.log("yes>>>>>>>>>>>>>>");
+      fetch_keyword_data(type) 
+    } else {
+      console.log("no>>>>>>>>>>>>>>");
+      fetch_data()
+
+    }
+    }
+  useEffect(()=>{
+
+
+    fetch_data()
+},[])
+
+const fetch_keyword_data= async(v)=>{
+
+
+
+
+
+
+
+  // fetch  keyword data
+
+  fetch(`https://www.trueliberia.com/api/businesses?s=${v}`,{
+      method:'GET'
+  })
+  .then( async (result)=> {
+    // handle the response
+    const json= await result.json()
+    setcat_data(json)
+  //   console.log("efwe",json);
+  })
+  .catch((e)=> {
+    // handle the error
+  //   console.log("no>>>>>>>>>>>>>",);
+  
+  });
+
+
+
+
+
+}
+const fetch_data= async()=>{
+
+    // fetch  cat data
+
+    fetch(`https://www.trueliberia.com/api/businesses?cat=${props.route.params.data}`,{
+        method:'GET'
+    })
+    .then( async (result)=> {
+      // handle the response
+      const json= await result.json()
+      setcat_data(json)
+      setRefreshing(false)
+
+    //   console.log("efwe",json);
+    })
+    .catch((e)=> {
+      // handle the error
+    //   console.log("no>>>>>>>>>>>>>",);
+    
+    });
+
+
+}
   const toggleDrawer = () => {
     setDrawerOpen(!openDrawer)
   }
@@ -126,7 +210,10 @@ const SearchDetails = (props) => {
     <SafeAreaProvider>
      <Drawer open={openDrawer} toggleDrawer={toggleDrawer}>
          <SafeAreaView style={styles.safeArea}>
-             <ScrollView>
+             <ScrollView  refreshControl={
+  <RefreshControl refreshing={refreshing}
+    onRefresh={_onRefresh1}tintColor="#F8852D"/>
+}>
 
                  <View style={styles.container}>
                      <View style={styles.nav}>
@@ -149,13 +236,19 @@ const SearchDetails = (props) => {
                          </TouchableOpacity>
                      </View>
 
-
                      <View style={styles.searchSection}>
                          <Icon style={styles.searchIcon} name="map-marker-alt" size={20} color="#000" />
-                         <TextInput value={search} style={styles.input} placeholder="Search here...." onChangeText={(searchString)=> {setSearch(searchString); setSearchTrue(true)}}
+                         <TextInput   onChangeText={(e)=>{settype(e)}}  style={styles.input} placeholder="Search here...."
                              // underlineColorAndroid="transparent"
                              />
+                             <TouchableOpacity style={{}} onPress={()=>{        search_data()
+                                                }}>
 
+                               <Image resizeMode='contain' style={{width:19,height:40,}} source={se} >
+
+</Image>
+                                 {/* <Text style={{color:'black'}}>njk</Text> */}
+                             </TouchableOpacity>
                      </View>
                      <View style={{width:'80%',marginTop:10}}>
                          {search.length>0 && searchTrue?
@@ -181,103 +274,63 @@ const SearchDetails = (props) => {
                      <Text style={{fontSize:14,fontWeight:'bold',color:'#00296B',marginBottom:0,marginLeft:'5%'}}>
                          Catagories result for {props.route.params.val}:
                      </Text>
-
-                     <View style={styles.card2}>
-                         <TouchableOpacity activeOpacity={0.7}>
-                             <Image style={{width:'100%',height:160,resizeMode:'cover',borderTopLeftRadius:10,borderTopRightRadius:10}} source={{uri:'https://d2cej47ganbxpf.cloudfront.net/media/filer_public/e0/50/e05064bd-0451-4b15-a1b4-4d14c15c11d2/screen_shot_2021-03-22_at_85449_am.png'}}>
-
-                             </Image>
-                             <View style={{width:'100%',height:60,display:'flex',alignItems:'center',justifyContent:'space-between',flexDirection:'row',paddingHorizontal:10}}>
-                                 <View>
-                                     <Text style={{fontSize:14,fontWeight:'bold',color:'#00296B'}}>
-                                         Echo1
-                                     </Text>
-                                     <Text style={{fontSize:12,color:'grey'}}>
-                                         Solar beach marchat
-                                     </Text>
-                                 </View>
-                                 <View>
-                                     <Text style={{fontWeight:'bold',color:'#1FDB5F',fontSize:15}}>4.3</Text>
-                                 </View>
-                             </View>
-                         </TouchableOpacity>
-                     </View>
-
-
-
-
-
-                     <View style={styles.card2}>
-                         <TouchableOpacity activeOpacity={0.7}>
-                             <Image style={{width:'100%',height:160,resizeMode:'cover',borderTopLeftRadius:10,borderTopRightRadius:10}} source={{uri:'https://ar.rdcpix.com/7efd8fc5d2c1744ebf2ae922a0cec90cc-f3791207535od-w480_h360.jpg'}}>
+                      {cat_data.length>0? cat_data.map((v,i)=>{
+                          return(
+                            
+                              <View key={i}  style={styles.card2}>
+                         <TouchableOpacity onPress={()=>{props.navigation.navigate('itemDetails',{data:v})}} activeOpacity={0.7}>
+                             <Image style={{width:'100%',height:160,resizeMode:'cover',borderTopLeftRadius:10,borderTopRightRadius:10}} source={{uri:v.image}}>
 
                              </Image>
                              <View style={{width:'100%',height:60,display:'flex',alignItems:'center',justifyContent:'space-between',flexDirection:'row',paddingHorizontal:10}}>
                                  <View>
                                      <Text style={{fontSize:14,fontWeight:'bold',color:'#00296B'}}>
-                                         Echo2
+                                     {v.name}
                                      </Text>
                                      <Text style={{fontSize:12,color:'grey'}}>
-                                         Solar beach marchat
+                                     {v.slug}
                                      </Text>
                                  </View>
                                  <View>
-                                     <Text style={{fontWeight:'bold',color:'#1FDB5F',fontSize:15}}>4.3</Text>
+                                     <Text style={{fontWeight:'bold',color:'#1FDB5F',fontSize:15}}>{v.rating}</Text>
                                  </View>
                              </View>
                          </TouchableOpacity>
                      </View>
+                         )
+                     }):
+                     
+                     <View  style={{width:'100%',display:'flex',justifyContent:'center',alignItems:'center',flexDirection:'column'}}>
+{console.log("gh>>>")}
+                            <ContentLoader height="280" width="90%"  >
+                            
+                            <Rect x="15" y="15" rx="6" ry="6" width="350" height="25" />
+                          
+                            <Rect x="15" y="50" rx="2" ry="2" width="350" height="150" />
+
+                          </ContentLoader>
+                          <ContentLoader height="280" width="90%"  >
+                            
+                            <Rect x="15" y="15" rx="6" ry="6" width="350" height="25" />
+                          
+                            <Rect x="15" y="50" rx="2" ry="2" width="350" height="150" />
+
+                          </ContentLoader>
+                          <ContentLoader height="280" width="90%"  >
+                            
+                            <Rect x="15" y="15" rx="6" ry="6" width="350" height="25" />
+                          
+                            <Rect x="15" y="50" rx="2" ry="2" width="350" height="150" />
+
+                          </ContentLoader>
+                            </View>
+                     }
 
 
 
 
 
-                     <View style={styles.card2}>
-                         <TouchableOpacity activeOpacity={0.7}>
-                             <Image style={{width:'100%',height:160,resizeMode:'cover',borderTopLeftRadius:10,borderTopRightRadius:10}} source={{uri:'https://rentpath-res.cloudinary.com/$img_current/t_3x2_jpg_xl/t_unpaid/a213370dccc6991c9e2ff7bcb5e25117'}}>
-
-                             </Image>
-                             <View style={{width:'100%',height:60,display:'flex',alignItems:'center',justifyContent:'space-between',flexDirection:'row',paddingHorizontal:10}}>
-                                 <View>
-                                     <Text style={{fontSize:14,fontWeight:'bold',color:'#00296B'}}>
-                                         Echo3
-                                     </Text>
-                                     <Text style={{fontSize:12,color:'grey'}}>
-                                         Solar beach marchat
-                                     </Text>
-                                 </View>
-                                 <View>
-                                     <Text style={{fontWeight:'bold',color:'#1FDB5F',fontSize:15}}>4.3</Text>
-                                 </View>
-                             </View>
-                         </TouchableOpacity>
-                     </View>
-
-
-
-
-
-                     <View style={styles.card2}>
-                         <TouchableOpacity activeOpacity={0.7}>
-                             <Image style={{width:'100%',height:160,resizeMode:'cover',borderTopLeftRadius:10,borderTopRightRadius:10}} source={{uri:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRf6mB2G13MRN6LCNQye1dEmRlzKyKvhxZUtg&usqp=CAU'}}>
-
-                             </Image>
-                             <View style={{width:'100%',height:60,display:'flex',alignItems:'center',justifyContent:'space-between',flexDirection:'row',paddingHorizontal:10}}>
-                                 <View>
-                                     <Text style={{fontSize:14,fontWeight:'bold',color:'#00296B'}}>
-                                         Echo 4
-                                     </Text>
-                                     <Text style={{fontSize:12,color:'grey'}}>
-                                         Solar beach marchat
-                                     </Text>
-                                 </View>
-                                 <View>
-                                     <Text style={{fontWeight:'bold',color:'#1FDB5F',fontSize:15}}>4.3</Text>
-                                 </View>
-                             </View>
-                         </TouchableOpacity>
-                     </View>
-
+                    
 
 
 
