@@ -7,8 +7,16 @@ import Home from '../screen/home';
 import UpdateProfile from '../screen/update_profile';
 import SearchDetails from '../screen/searchDetails';
 import item_Details from '../screen/item_details';
+import Search from '../screen/search';
+
 import Map from '../screen/map';
 import MyCarousel from '../screen/slider';
+import Promos from '../screen/promos';
+import News from '../screen/news';
+import Places from '../screen/places';
+
+
+
 
 
 const Stack = createStackNavigator();
@@ -26,6 +34,18 @@ function AppNavigation() {
             options={{
             ...TransitionPresets.SlideFromRightIOS,
           }}/>
+           <Stack.Screen name="places" component={Places} 
+            options={{
+            ...TransitionPresets.SlideFromRightIOS,
+          }}/>
+           <Stack.Screen name="news" component={News} 
+            options={{
+            ...TransitionPresets.SlideFromRightIOS,
+          }}/>
+           <Stack.Screen name="promos" component={Promos} 
+            options={{
+            ...TransitionPresets.SlideFromRightIOS,
+          }}/>
 <Stack.Screen name="Map" component={Map} 
             options={{
             ...TransitionPresets.SlideFromRightIOS,
@@ -39,6 +59,11 @@ function AppNavigation() {
             ...TransitionPresets.SlideFromRightIOS,
           }}/> 
           <Stack.Screen name="searchDetails" component={SearchDetails} 
+             options={{
+              ...TransitionPresets.SlideFromRightIOS,
+            }}/>
+
+<Stack.Screen name="search" component={Search} 
              options={{
               ...TransitionPresets.SlideFromRightIOS,
             }}/>

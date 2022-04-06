@@ -17,6 +17,7 @@ import MenuDrawer from 'react-native-side-drawer'
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import MyCarouselitem from './itemDetailsSlider'
 import ReadMore from '@fawazahmed/react-native-read-more';
+import ContentLoader, { Rect, Circle, Path } from "react-content-loader/native"
 
 const Drawer = (props) => {
 console.log(props);
@@ -29,49 +30,49 @@ console.log(props);
     const baseStyle = {flex: 1}
 
     return(
-      <SafeAreaView edges={edges} style={baseStyle}>
+      <SafeAreaView  edges={edges} style={baseStyle}>
       <View style={{flexDirection: 'column', backgroundColor: '#00296B', flex: 1, padding: 20,marginBottom:-20,display:'flex',alignItems:'flex-start',paddingLeft:'20%',justifyContent:'flex-start',paddingTop:'55%'}}>
-          <TouchableOpacity activeOpacity={0.7}>
+          <TouchableOpacity onPress={()=>props.props.navigation.navigate('home')}  activeOpacity={0.7}>
               <Text style={{fontSize:20,fontWeight:'400',color:'#fff'}}>
                   Home
               </Text>
           </TouchableOpacity>
-
-
-          <TouchableOpacity activeOpacity={0.7}>
-
+ 
+ 
+          <TouchableOpacity onPress={()=>props.props.navigation.navigate('search')} activeOpacity={0.7}>
+ 
               <Text style={{fontSize:20,fontWeight:'400',color:'#fff',marginTop:25}}>
                   Search
               </Text>
           </TouchableOpacity>
-
-          <TouchableOpacity activeOpacity={0.7}>
+ 
+          <TouchableOpacity  onPress={()=>props.props.navigation.navigate('home')}activeOpacity={0.7}>
               <Text style={{fontSize:20,fontWeight:'400',color:'#fff',marginTop:25}}>
                   Business
               </Text>
           </TouchableOpacity>
-
-
-
-          <TouchableOpacity activeOpacity={0.7}>
+ 
+ 
+ 
+          <TouchableOpacity onPress={()=>props.props.navigation.navigate('promos')} activeOpacity={0.7}>
               <Text style={{fontSize:20,fontWeight:'400',color:'#fff',marginTop:25}}>
                   Promos
               </Text>
           </TouchableOpacity>
-
-          <TouchableOpacity activeOpacity={0.7}>
+ 
+          <TouchableOpacity onPress={()=>props.props.navigation.navigate('places')} activeOpacity={0.7}>
               <Text style={{fontSize:20,fontWeight:'400',color:'#fff',marginTop:25}}>
                   Places
               </Text>
           </TouchableOpacity>
-
-
-          <TouchableOpacity activeOpacity={0.7}>
+ 
+ 
+          <TouchableOpacity onPress={()=>props.props.navigation.navigate('news')} activeOpacity={0.7}>
               <Text style={{fontSize:20,fontWeight:'400',color:'#fff',marginTop:25}}>
                   News
               </Text>
           </TouchableOpacity>
-
+ 
       </View>
   </SafeAreaView>
     )
@@ -92,6 +93,9 @@ console.log(props);
 }
 const item_Details = (props) => {
   const [openDrawer, setDrawerOpen] = useState(false)
+  const [detail, setdetail] = useState(false)
+  const [detail_data, setdetail_data] = useState()
+
 
   const toggleDrawer = () => {
     setDrawerOpen(!openDrawer)
@@ -99,22 +103,43 @@ const item_Details = (props) => {
 const  data = props.route.params.data
   useEffect(()=>{
     console.log("awais>>>>>>>>>>>>>>>>>>>",data);
+    // fetch  keyword data
+   
+  fetch(`https://www.trueliberia.com/api/business/${data.code}`,{
+    method:'GET'
+})
+.then( async (result)=> {
+  // handle the response
+  const json= await result.json()
+  // setitem_data(json)
+  
+  console.log("yes>>>>>>>",json);
+  setdetail_data(json)
+  setdetail(true)
+})
+.catch((e)=> {
+  // handle the error
+  // console.log("no>>>>>>>>>>>>>",);
+
+});
     },[])
 
 
   return (
     <SafeAreaProvider>
-     <Drawer open={openDrawer} toggleDrawer={toggleDrawer}>
+     <Drawer props={props} open={openDrawer} toggleDrawer={toggleDrawer}>
          <SafeAreaView style={styles.safeArea}>
+{detail==true
+?
+<View>
+
              <ScrollView>
 
                  <View style={styles.container}>
                      <View style={styles.nav}>
 
-                         <TouchableOpacity activeOpacity={0.7} onPress={()=>props.navigation.navigate('updateprofile')}>
-                             <Image style={{width:45,height:45,borderRadius:60}} source={{uri:'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8cHJvZmlsZXxlbnwwfHwwfHw%3D&w=1000&q=80'}}>
-
-                             </Image>
+                         <TouchableOpacity activeOpacity={0.7} onPress={()=>props.navigation.navigate('home')}>
+                         <Icon name="arrow-left" style={{color:'white'}} size={24} color="#fff" />
                          </TouchableOpacity>
 
 
@@ -123,7 +148,10 @@ const  data = props.route.params.data
                          </Text>
 
 
-                         <TouchableOpacity onPress={()=>toggleDrawer()} activeOpacity={0.7}>
+                         <TouchableOpacity 
+                         onPress={()=>toggleDrawer()} 
+                         
+                         activeOpacity={0.7}>
                              <Icon name="bars" size={26} color="#fff" />
 
                          </TouchableOpacity>
@@ -132,7 +160,7 @@ const  data = props.route.params.data
 
 
                      <View style={{width:'100%',display:'flex',alignItems:'flex-start',justifyContent:'center',marginTop:-120,height:490,zIndex:0}}>
-                         <MyCarouselitem img={data.image} />
+                         <MyCarouselitem img={detail_data.images} />
                      </View>
 
 
@@ -140,10 +168,10 @@ const  data = props.route.params.data
                      <View style={styles.heading}>
                          <View>
                              <Text style={{fontSize:20,fontWeight:'bold',color:'#00296B'}}>
-                                {data.name}
+                                {detail_data.name}
                              </Text>
                              <Text style={{fontSize:15,fontWeight:'600',color:'#CCCCCC'}}>
-                                 {data.slug}
+                                 {detail_data.address}
                              </Text>
                              <Text style={{fontSize:15,fontWeight:'700',color:'#F21010'}}>
                                  {data.category}
@@ -153,7 +181,7 @@ const  data = props.route.params.data
 
 
                          <Text style={{fontSize:20,fontWeight:'bold',color:'#1FDB5F'}}>
-                             {data.rating}
+                             {detail_data.rating}
                          </Text>
                      </View>
 
@@ -164,8 +192,8 @@ const  data = props.route.params.data
 
                          <ReadMore numberOfLines={3} style={styles.textStyle}>
                              {
-                                 data.description
-                             }
+                               data.description
+                              }
                          </ReadMore>
                          <View style={{width:'100%',height:150}}>
                              <Text style={{fontSize:16,color:'#000',fontWeight:'500'}}>
@@ -173,7 +201,7 @@ const  data = props.route.params.data
                              </Text>
 
                              <Text style={{color:'#00296B',fontSize:13}}>
-                                 OutDoor Steaking , Car Parking , Takes Reservation , allow walking , Great For kids ,Wifi Available
+                                {detail_data.features}
                              </Text>
                          </View>
                      </View>
@@ -183,7 +211,6 @@ const  data = props.route.params.data
 
 
                  </View>
-
              </ScrollView>
 
              <View style={{width:'100%',height:65,backgroundColor:'#fff',position:'absolute',bottom:0,display:'flex',alignItems:'center',justifyContent:'center'}}>
@@ -195,6 +222,34 @@ const  data = props.route.params.data
                  </TouchableOpacity>
 
              </View>
+                              </View>
+:
+  
+<View  style={{width:'100%',display:'flex',justifyContent:'center',alignItems:'center',flexDirection:'column'}}>
+{console.log("gh>>>")}
+                            <ContentLoader height="280" width="90%"  >
+                            
+                            <Rect x="15" y="15" rx="6" ry="6" width="350" height="25" />
+                          
+                            <Rect x="15" y="50" rx="2" ry="2" width="350" height="150" />
+
+                          </ContentLoader>
+                          <ContentLoader height="280" width="90%"  >
+                            
+                            <Rect x="15" y="15" rx="6" ry="6" width="350" height="25" />
+                          
+                            <Rect x="15" y="50" rx="2" ry="2" width="350" height="150" />
+
+                          </ContentLoader>
+                          <ContentLoader height="280" width="90%"  >
+                            
+                            <Rect x="15" y="15" rx="6" ry="6" width="350" height="25" />
+                          
+                            <Rect x="15" y="50" rx="2" ry="2" width="350" height="150" />
+
+                          </ContentLoader>
+                            </View>
+}
          </SafeAreaView>
      </Drawer>
  </SafeAreaProvider>

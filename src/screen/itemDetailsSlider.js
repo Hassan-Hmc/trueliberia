@@ -9,7 +9,8 @@ export const ITEM_WIDTH = Math.round(SLIDER_WIDTH );
 const renderItem = ({item}) => {
   return (
     <View style={styles.card2}>
-      <ImageBackground style={{width:'100%',height:450,resizeMode:'cover',borderTopLeftRadius:10,borderTopRightRadius:10}} source={{uri:item.url}}>
+      {console.log("sxaxsa",item)}
+      <ImageBackground style={{width:'100%',height:450,resizeMode:'cover',borderTopLeftRadius:10,borderTopRightRadius:10}} source={{uri:item}}>
 
       </ImageBackground>
 
@@ -20,31 +21,31 @@ const renderItem = ({item}) => {
 const MyCarouselitem = (props) => {
   const [index, setIndex] = useState(0);
   const isCarousel = useRef(null);
-  
-const data = [
-  {
-    id: 1,
-    name: 'Farmhouse kitchen',
-    url: props.img,
-    Rating:4.4,
-    name2:'20 street snkoor 3',
+  console.log("aw>>>>>>>>>>>",props.img.length);
+// const data = [
+//   {
+//     id: 1,
+//     name: 'Farmhouse kitchen',
+//     url: props.img,
+//     Rating:4.4,
+//     name2:'20 street snkoor 3',
 
-  },
+//   },
   
-];
+// ];
   
   return (
     <View style={{marginVertical: 10}}>
       <Carousel
         ref={isCarousel}
-        data={data}
+        data={props.img}
         renderItem={renderItem}
         sliderWidth={SLIDER_WIDTH}
         itemWidth={ITEM_WIDTH}
         onSnapToItem={index => setIndex(index)}
       />
       <Pagination
-        dotsLength={data.length}
+        dotsLength={props.img.length}
         activeDotIndex={index}
         carouselRef={isCarousel}
         dotStyle={{

@@ -11,7 +11,8 @@ import {
   View,
   Image,
   ImageBackground,
-  RefreshControl
+  RefreshControl,
+  Dimensions
 } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import MenuDrawer from 'react-native-side-drawer'
@@ -22,31 +23,32 @@ import ContentLoader, { Rect, Circle, Path } from "react-content-loader/native"
 const Drawer = (props) => {
   const overlay = false
   const position = 'left'
+  {console.log(">>>>>>>>>>>>>>>");}
 
-  const drawerContent = () => {
+  const drawerContent = (props) => {
     const edges = position == 'right' ? ['bottom', 'top', 'right'] : ['bottom', 'top', 'left']
     const baseStyle = {flex: 1}
 
-    
+    console.log("b>>>>>>>>>>>>>>>>>>>>>>>>>>>>",props.props);
 
     return(
       <SafeAreaView edges={edges} style={baseStyle}>
      <View style={{flexDirection: 'column', backgroundColor: '#00296B', flex: 1, padding: 20,marginBottom:-20,display:'flex',alignItems:'flex-start',paddingLeft:'20%',justifyContent:'flex-start',paddingTop:'55%'}}>
-         <TouchableOpacity activeOpacity={0.7}>
+         <TouchableOpacity onPress={()=>props.props.navigation.navigate('home')}  activeOpacity={0.7}>
              <Text style={{fontSize:20,fontWeight:'400',color:'#fff'}}>
                  Home
              </Text>
          </TouchableOpacity>
 
 
-         <TouchableOpacity activeOpacity={0.7}>
+         <TouchableOpacity onPress={()=>props.props.navigation.navigate('search')} activeOpacity={0.7}>
 
              <Text style={{fontSize:20,fontWeight:'400',color:'#fff',marginTop:25}}>
                  Search
              </Text>
          </TouchableOpacity>
 
-         <TouchableOpacity activeOpacity={0.7}>
+         <TouchableOpacity  onPress={()=>props.props.navigation.navigate('home')}activeOpacity={0.7}>
              <Text style={{fontSize:20,fontWeight:'400',color:'#fff',marginTop:25}}>
                  Business
              </Text>
@@ -54,20 +56,20 @@ const Drawer = (props) => {
 
 
 
-         <TouchableOpacity activeOpacity={0.7}>
+         <TouchableOpacity onPress={()=>props.props.navigation.navigate('promos')} activeOpacity={0.7}>
              <Text style={{fontSize:20,fontWeight:'400',color:'#fff',marginTop:25}}>
                  Promos
              </Text>
          </TouchableOpacity>
 
-         <TouchableOpacity activeOpacity={0.7}>
+         <TouchableOpacity onPress={()=>props.props.navigation.navigate('places')} activeOpacity={0.7}>
              <Text style={{fontSize:20,fontWeight:'400',color:'#fff',marginTop:25}}>
                  Places
              </Text>
          </TouchableOpacity>
 
 
-         <TouchableOpacity activeOpacity={0.7}>
+         <TouchableOpacity onPress={()=>props.props.navigation.navigate('news')} activeOpacity={0.7}>
              <Text style={{fontSize:20,fontWeight:'400',color:'#fff',marginTop:25}}>
                  News
              </Text>
@@ -81,7 +83,7 @@ const Drawer = (props) => {
   return (
     <MenuDrawer
       open={props.open}
-      drawerContent={drawerContent()}
+      drawerContent={drawerContent(props)}
       position={position}
       drawerPercentage={70}
       animationTime={250}
@@ -96,8 +98,10 @@ const Home = (props) => {
   const [cat_data, setcat_data] = useState([])
   const [data, setdata] = useState([])
   const [type, settype] = useState()
-  const [hj, sethj] = useState()
+  const [cond, setcond] = useState(20)
   const [refreshing, setRefreshing] = useState(false)
+  const [data_check, setdata_check] = useState(false)
+
 
   const _onRefresh1 = () => {
     setRefreshing(true);
@@ -108,7 +112,6 @@ const Home = (props) => {
   
   };
   const search_data=()=>{
-    console.log("vvvvvvv",type)
 
     if (type) {
       console.log("yes>>>>>>>>>>>>>>");
@@ -128,7 +131,6 @@ const Home = (props) => {
       
   
 
-console.log("run again>>>>>>>>>>>>>>>>>>>>>");
 
     
 
@@ -154,7 +156,6 @@ const fetch_cat_data= async()=>{
     setcat_data(json)
   
 
-  //   console.log("efwe",json);
   })
   .catch((e)=> {
     // handle the error
@@ -179,7 +180,7 @@ const fetch_data= async()=>{
 
     //fetch feature data
 
-    
+    setdata_check(true)
 
     fetch('https://www.trueliberia.com/api/businesses',{
         method:'GET'
@@ -188,6 +189,10 @@ const fetch_data= async()=>{
       // handle the response
       const json= await result.json()
       setdata(json)
+      if (json.length==0) {
+      
+        setdata_check(false)
+      }
         setRefreshing(false)
 
     //   console.log("efwe>>>",json);
@@ -207,7 +212,7 @@ const fetch_keyword_data= async(v)=>{
 
 
 
-
+setdata_check(true)
 
 
 
@@ -221,6 +226,10 @@ const fetch_keyword_data= async(v)=>{
     const json= await result.json()
     setdata(json)
   //   console.log("efwe",json);
+  if (json.length==0) {
+      
+    setdata_check(false)
+  }
   })
   .catch((e)=> {
     // handle the error
@@ -259,10 +268,11 @@ const fetch_keyword_data= async(v)=>{
   let myitems =searchSugestion.filter(FilterData);
   
 
+  const windowHeight = Dimensions.get('window').height;
 
   return (
     <SafeAreaProvider>
-     <Drawer open={openDrawer} toggleDrawer={toggleDrawer}>
+     <Drawer props={props} open={openDrawer} toggleDrawer={toggleDrawer}>
          <SafeAreaView style={styles.safeArea}>
              <ScrollView          refreshControl={
   <RefreshControl refreshing={refreshing}
@@ -293,7 +303,7 @@ const fetch_keyword_data= async(v)=>{
 
                      <View style={styles.searchSection}>
                          <Icon style={styles.searchIcon} name="map-marker-alt" size={20} color="#000" />
-                         <TextInput   onChangeText={(e)=>{settype(e)}}  style={styles.input} placeholder="Search here...."
+                         <TextInput onTouchStart={()=>{props.navigation.navigate('search')}}   onChangeText={(e)=>{settype(e)}}  style={styles.input} placeholder="Search here...."
                              // underlineColorAndroid="transparent"
                              />
                              <TouchableOpacity onPress={()=>{        search_data()
@@ -335,7 +345,6 @@ const fetch_keyword_data= async(v)=>{
                         {cat_data.length>0?cat_data.map((v,i)=>{
                           return(
                               <TouchableOpacity activeOpacity={0.7} key={i}  onPress={()=>{props.navigation.navigate('searchDetails',{data:v.slug})}} >
-
                                 <ImageBackground style={styles.card} imageStyle={{borderRadius:60}} source={{uri:v.image}}>
                              <View>
 
@@ -347,7 +356,6 @@ const fetch_keyword_data= async(v)=>{
                           :
                           
                           <View  style={{width:'100%',display:'flex',justifyContent:'center',alignItems:'center',flexDirection:'column'}}>
-                     {console.log("gh>>>")}
                      <ContentLoader 
     speed={2}
     width={'90%'}
@@ -393,11 +401,14 @@ const fetch_keyword_data= async(v)=>{
                      </Text>
 
 
-                        {data.length>0?data.map((v,i)=>{
+                        {data_check==true?
+                        data.length>0?
+                        data.map((v,i)=>{
+                          if (i<cond) {
                             return(
 
-                                <View key={i} style={styles.card2}>
-                                <TouchableOpacity onPress={()=>{props.navigation.navigate('itemDetails',{data:v})}} activeOpacity={0.7}>
+  <View key={i} style={styles.card2}>
+  <TouchableOpacity onPress={()=>{props.navigation.navigate('itemDetails',{data:v})}} activeOpacity={0.7}>
                                     <Image style={{width:'100%',height:160,resizeMode:'cover',borderTopLeftRadius:10,borderTopRightRadius:10}} source={{uri:v.image}}>
                                     </Image>
                                     <View style={{width:'100%',height:60,display:'flex',alignItems:'center',justifyContent:'space-between',flexDirection:'row',paddingHorizontal:10}}>
@@ -416,10 +427,10 @@ const fetch_keyword_data= async(v)=>{
                                 </TouchableOpacity>
                             </View>
                             )
+                          }
                         }):
                         
                      <View  style={{width:'100%',display:'flex',justifyContent:'center',alignItems:'center',flexDirection:'column'}}>
-                     {console.log("gh>>>")}
                                                  <ContentLoader height="280" width="90%"  >
                                                  
                                                  <Rect x="15" y="15" rx="6" ry="6" width="350" height="25" />
@@ -442,8 +453,9 @@ const fetch_keyword_data= async(v)=>{
                      
                                                </ContentLoader>
                                                  </View>
+                                                 :
+                                                 <View style={{width:'100%',height:windowHeight-150,display:'flex',justifyContent:'center',alignItems:'center'}}><Text style={{color:'black',fontWeight:'bold',fontSize:15}}>No Result Found !</Text></View>
                         }
-
 
 
 
@@ -456,7 +468,10 @@ const fetch_keyword_data= async(v)=>{
 
 
 
+<TouchableOpacity onPress={()=>{setcond(cond+20)}} style={{backgroundColor:'#326EC6',width:'30%',display:'flex',justifyContent:'center',alignItems:'center',borderRadius:2,marginBottom:15,height:28,marginTop:9}}>
 
+  <Text style={{color:'black',fontWeight:'bold',fontSize:15,color:'white'}}>Load More</Text>
+</TouchableOpacity>
                  </View>
              </ScrollView>
 

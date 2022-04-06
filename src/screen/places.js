@@ -11,7 +11,8 @@ import {
   View,
   Image,
   ImageBackground,
-  RefreshControl
+  RefreshControl,
+  Dimensions
 } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import MenuDrawer from 'react-native-side-drawer'
@@ -19,9 +20,9 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import MyCarousel from './slider'
 import ContentLoader, { Rect, Circle, Path } from "react-content-loader/native"
 import se from '../screen/image/search.png'
+import { set } from 'react-native-reanimated';
 
 const Drawer = (props) => {
-console.log(props);
 
   const overlay = false
   const position = 'left'
@@ -33,47 +34,47 @@ console.log(props);
     return(
       <SafeAreaView edges={edges} style={baseStyle}>
       <View style={{flexDirection: 'column', backgroundColor: '#00296B', flex: 1, padding: 20,marginBottom:-20,display:'flex',alignItems:'flex-start',paddingLeft:'20%',justifyContent:'flex-start',paddingTop:'55%'}}>
-          <TouchableOpacity activeOpacity={0.7}>
+          <TouchableOpacity onPress={()=>props.props.navigation.navigate('home')}  activeOpacity={0.7}>
               <Text style={{fontSize:20,fontWeight:'400',color:'#fff'}}>
                   Home
               </Text>
           </TouchableOpacity>
-
-
-          <TouchableOpacity activeOpacity={0.7}>
-
+ 
+ 
+          <TouchableOpacity onPress={()=>props.props.navigation.navigate('search')} activeOpacity={0.7}>
+ 
               <Text style={{fontSize:20,fontWeight:'400',color:'#fff',marginTop:25}}>
                   Search
               </Text>
           </TouchableOpacity>
-
-          <TouchableOpacity activeOpacity={0.7}>
+ 
+          <TouchableOpacity  onPress={()=>props.props.navigation.navigate('home')}activeOpacity={0.7}>
               <Text style={{fontSize:20,fontWeight:'400',color:'#fff',marginTop:25}}>
                   Business
               </Text>
           </TouchableOpacity>
-
-
-
-          <TouchableOpacity activeOpacity={0.7}>
+ 
+ 
+ 
+          <TouchableOpacity onPress={()=>props.props.navigation.navigate('promos')} activeOpacity={0.7}>
               <Text style={{fontSize:20,fontWeight:'400',color:'#fff',marginTop:25}}>
                   Promos
               </Text>
           </TouchableOpacity>
-
-          <TouchableOpacity activeOpacity={0.7}>
+ 
+          <TouchableOpacity onPress={()=>props.props.navigation.navigate('places')} activeOpacity={0.7}>
               <Text style={{fontSize:20,fontWeight:'400',color:'#fff',marginTop:25}}>
                   Places
               </Text>
           </TouchableOpacity>
-
-
-          <TouchableOpacity activeOpacity={0.7}>
+ 
+ 
+          <TouchableOpacity onPress={()=>props.props.navigation.navigate('news')} activeOpacity={0.7}>
               <Text style={{fontSize:20,fontWeight:'400',color:'#fff',marginTop:25}}>
                   News
               </Text>
           </TouchableOpacity>
-
+ 
       </View>
   </SafeAreaView>
     )
@@ -92,12 +93,13 @@ console.log(props);
     </MenuDrawer>
   );
 }
-const SearchDetails = (props) => {
-  console.log("cwdwecewcwe>>>>>>>",props.props);
+const Places = (props) => {
   const [openDrawer, setDrawerOpen] = useState(false)
   const [cat_data, setcat_data] = useState([])
   const [type, settype] = useState()
   const [cond, setcond] = useState(20)
+  const [data, setdata] = useState(false)
+
 
   const [refreshing, setRefreshing] = useState(false)
   const _onRefresh1 = () => {
@@ -109,22 +111,18 @@ const SearchDetails = (props) => {
   };
 
   const search_data=()=>{
-    console.log("vvvvvvv",type)
 
     if (type) {
       console.log("yes>>>>>>>>>>>>>>");
       fetch_keyword_data(type) 
+      setdata(true)
     } else {
       console.log("no>>>>>>>>>>>>>>");
-      fetch_data()
+     
 
     }
     }
-  useEffect(()=>{
 
-
-    fetch_data()
-},[])
 
 const fetch_keyword_data= async(v)=>{
 
@@ -143,11 +141,15 @@ const fetch_keyword_data= async(v)=>{
     // handle the response
     const json= await result.json()
     setcat_data(json)
-  //   console.log("efwe",json);
+    if (json.length==0) {
+      
+      setdata(false)
+    }
+    // console.log("yes>>>>>>>",json);
   })
   .catch((e)=> {
     // handle the error
-  //   console.log("no>>>>>>>>>>>>>",);
+    // console.log("no>>>>>>>>>>>>>",);
   
   });
 
@@ -156,29 +158,7 @@ const fetch_keyword_data= async(v)=>{
 
 
 }
-const fetch_data= async()=>{
 
-    // fetch  cat data
-
-    fetch(`https://www.trueliberia.com/api/businesses?cat=${props.route.params.data}`,{
-        method:'GET'
-    })
-    .then( async (result)=> {
-      // handle the response
-      const json= await result.json()
-      setcat_data(json)
-      setRefreshing(false)
-
-    //   console.log("efwe",json);
-    })
-    .catch((e)=> {
-      // handle the error
-    //   console.log("no>>>>>>>>>>>>>",);
-    
-    });
-
-
-}
   const toggleDrawer = () => {
     setDrawerOpen(!openDrawer)
   }
@@ -204,13 +184,14 @@ const fetch_data= async()=>{
   
   let myitems =searchSugestion.filter(FilterData);
   
+  const windowHeight = Dimensions.get('window').height;
 
 
 
 
   return (
     <SafeAreaProvider>
-     <Drawer open={openDrawer} toggleDrawer={toggleDrawer}>
+     <Drawer props={props} open={openDrawer} toggleDrawer={toggleDrawer}>
          <SafeAreaView style={styles.safeArea}>
              <ScrollView  refreshControl={
   <RefreshControl refreshing={refreshing}
@@ -220,10 +201,8 @@ const fetch_data= async()=>{
                  <View style={styles.container}>
                      <View style={styles.nav}>
 
-                         <TouchableOpacity activeOpacity={0.7} onPress={()=>props.navigation.navigate('updateprofile')}>
-                             <Image style={{width:45,height:45,borderRadius:60}} source={{uri:'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8cHJvZmlsZXxlbnwwfHwwfHw%3D&w=1000&q=80'}}>
-
-                             </Image>
+                     <TouchableOpacity activeOpacity={0.7} onPress={()=>props.navigation.navigate('home')}>
+                         <Icon name="arrow-left" style={{color:'black'}} size={24} color="#fff" />
                          </TouchableOpacity>
 
 
@@ -274,9 +253,11 @@ const fetch_data= async()=>{
 
                  <View style={{width:'100%',display:'flex',alignItems:'flex-start',justifyContent:'center',marginTop:10}}>
                      <Text style={{fontSize:14,fontWeight:'bold',color:'#00296B',marginBottom:0,marginLeft:'5%'}}>
-                         Catagories result for {props.route.params.val}:
+                         {/* Catagories result for  */}
                      </Text>
-                      {cat_data.length>0? cat_data.map((v,i)=>{
+                      {data==true?
+                      cat_data.length>0?
+                      cat_data.map((v,i)=>{
                         if(i<cond)
                         {
                           
@@ -307,7 +288,6 @@ const fetch_data= async()=>{
                      }):
                      
                      <View  style={{width:'100%',display:'flex',justifyContent:'center',alignItems:'center',flexDirection:'column'}}>
-{console.log("gh>>>")}
                             <ContentLoader height="280" width="90%"  >
                             
                             <Rect x="15" y="15" rx="6" ry="6" width="350" height="25" />
@@ -330,6 +310,8 @@ const fetch_data= async()=>{
 
                           </ContentLoader>
                             </View>
+                            :
+                            <View style={{width:'100%',height:windowHeight-150,display:'flex',justifyContent:'center',alignItems:'center'}}><Text style={{color:'black',fontWeight:'bold',fontSize:15}}>No Result Found !</Text></View>
                      }
 
 
@@ -344,11 +326,14 @@ const fetch_data= async()=>{
                  </View>
 
 
-
+{data==true?
                  <TouchableOpacity onPress={()=>{setcond(cond+10)}} style={{backgroundColor:'#326EC6',width:'30%',display:'flex',justifyContent:'center',alignItems:'center',borderRadius:2,marginBottom:15,height:28,marginTop:9}}>
-
 <Text style={{color:'black',fontWeight:'bold',fontSize:15,color:'white'}}>Load More</Text>
 </TouchableOpacity>
+:
+console.log(data)
+
+}
 
                  </View>
              </ScrollView>
@@ -459,4 +444,4 @@ card2:{
   backgroundColor:'rgba(255, 255, 255, 0.438)',}
 });
 
-export default SearchDetails;
+export default Places;

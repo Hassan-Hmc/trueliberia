@@ -19,7 +19,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import MyCarousel from './slider'
 import MapView from 'react-native-maps';
 import { Marker,Callout,CalloutSubview  } from 'react-native-maps';
-
+import loc from '../screen/image/loc.png'
 
 const Map = (props) => {
   const [openDrawer, setDrawerOpen] = useState(false)
@@ -77,7 +77,15 @@ console.log("awia",data,'fffs',JSON.parse(data.lati));
       // description={"marker.description"}
       image={''}
     >
-      <Image resizeMode='contain' style={{width:100,height:40}} source={require('../screen/image/loc.png')} >
+      {/* <Image resizeMode='contain' style={{width:100,height:40}} source={loc} >
+
+      </Image> */}
+
+      <Image
+     
+       source={{uri:data.image}}
+      style={{width: 40, height: 40, borderRadius: 40/ 2}} 
+      >
 
       </Image>
       

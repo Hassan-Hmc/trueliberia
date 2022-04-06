@@ -27,5 +27,10 @@
     android:name="com.google.android.geo.API_KEY"
     android:value="AIzaSyCRmQnz4IHqFdUzfYDZj-05XEGeGKG0XMk" />
 
+  
+
+      
+  
+
     </application>
 </manifest>
