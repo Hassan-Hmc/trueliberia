@@ -19,7 +19,7 @@ import MenuDrawer from 'react-native-side-drawer'
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import MyCarousel from './slider'
 import ContentLoader, { Rect, Circle, Path } from "react-content-loader/native"
-
+import { useIsFocused } from '@react-navigation/native';
 const Drawer = (props) => {
   const overlay = false
   const position = 'left'
@@ -74,6 +74,11 @@ const Drawer = (props) => {
                  News
              </Text>
          </TouchableOpacity>
+         <TouchableOpacity onPress={()=>props.props.navigation.navigate('link')} activeOpacity={0.7}>
+             <Text style={{fontSize:20,fontWeight:'400',color:'#fff',marginTop:25}}>
+                 Link
+             </Text>
+         </TouchableOpacity>
 
      </View>
  </SafeAreaView>
@@ -101,7 +106,10 @@ const Home = (props) => {
   const [cond, setcond] = useState(20)
   const [refreshing, setRefreshing] = useState(false)
   const [data_check, setdata_check] = useState(false)
-
+  const isFocused = useIsFocused();
+  useEffect(()=>{
+    setDrawerOpen(false)
+  },[props,isFocused])
 
   const _onRefresh1 = () => {
     setRefreshing(true);
@@ -195,7 +203,7 @@ const fetch_data= async()=>{
       }
         setRefreshing(false)
 
-    //   console.log("efwe>>>",json);
+      console.log("efwe>>>",json[0]);
     })
     .catch((e)=> {
       // handle the error
@@ -282,8 +290,9 @@ setdata_check(true)
                  <View style={styles.container}>
                      <View style={styles.nav}>
 
-                         <TouchableOpacity activeOpacity={0.7} onPress={()=>props.navigation.navigate('updateprofile')}>
-                             <Image style={{width:45,height:45,borderRadius:60}} source={{uri:'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8cHJvZmlsZXxlbnwwfHwwfHw%3D&w=1000&q=80'}}>
+                         <TouchableOpacity activeOpacity={0.7} 
+                         >
+                             <Image style={{width:34,height:34,borderRadius:60}} source={{uri:'https://w7.pngwing.com/pngs/178/595/png-transparent-user-profile-computer-icons-login-user-avatars.png'}}>
 
                              </Image>
                          </TouchableOpacity>

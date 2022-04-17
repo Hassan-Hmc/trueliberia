@@ -19,6 +19,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import MyCarousel from './slider'
 import ContentLoader, { Rect, Circle, Path } from "react-content-loader/native"
 import se from '../screen/image/search.png'
+import { useIsFocused } from '@react-navigation/native';
 
 const Drawer = (props) => {
 console.log(props);
@@ -74,6 +75,7 @@ console.log(props);
               </Text>
           </TouchableOpacity>
 
+
       </View>
   </SafeAreaView>
     )
@@ -98,7 +100,11 @@ const SearchDetails = (props) => {
   const [cat_data, setcat_data] = useState([])
   const [type, settype] = useState()
   const [cond, setcond] = useState(20)
+  const isFocused = useIsFocused();
 
+  useEffect(()=>{
+    setDrawerOpen(false)
+  },[props,isFocused])
   const [refreshing, setRefreshing] = useState(false)
   const _onRefresh1 = () => {
     setRefreshing(true);
@@ -221,7 +227,7 @@ const fetch_data= async()=>{
                      <View style={styles.nav}>
 
                          <TouchableOpacity activeOpacity={0.7} onPress={()=>props.navigation.navigate('updateprofile')}>
-                             <Image style={{width:45,height:45,borderRadius:60}} source={{uri:'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8cHJvZmlsZXxlbnwwfHwwfHw%3D&w=1000&q=80'}}>
+                             <Image style={{width:34,height:34,borderRadius:60}} source={{uri:'https://w7.pngwing.com/pngs/178/595/png-transparent-user-profile-computer-icons-login-user-avatars.png'}}>
 
                              </Image>
                          </TouchableOpacity>

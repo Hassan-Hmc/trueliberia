@@ -12,6 +12,8 @@ import Search from '../screen/search';
 import Map from '../screen/map';
 import MyCarousel from '../screen/slider';
 import Promos from '../screen/promos';
+import Link from '../screen/link';
+
 import News from '../screen/news';
 import Places from '../screen/places';
 
@@ -31,6 +33,10 @@ function AppNavigation() {
    }}
    >
           <Stack.Screen name="home" component={Home} 
+            options={{
+            ...TransitionPresets.SlideFromRightIOS,
+          }}/>
+           <Stack.Screen name="link" component={Link} 
             options={{
             ...TransitionPresets.SlideFromRightIOS,
           }}/>

@@ -9,7 +9,7 @@ export const ITEM_WIDTH = Math.round(SLIDER_WIDTH );
 const renderItem = ({item}) => {
   return (
     <View style={styles.card2}>
-      {console.log("sxaxsa",item)}
+      {/* {console.log("sxaxsa",item)} */}
       <ImageBackground style={{width:'100%',height:450,resizeMode:'cover',borderTopLeftRadius:10,borderTopRightRadius:10}} source={{uri:item}}>
 
       </ImageBackground>
@@ -21,7 +21,7 @@ const renderItem = ({item}) => {
 const MyCarouselitem = (props) => {
   const [index, setIndex] = useState(0);
   const isCarousel = useRef(null);
-  console.log("aw>>>>>>>>>>>",props.img.length);
+  // console.log("aw>>>>>>>>>>>",props.img.length);
 // const data = [
 //   {
 //     id: 1,

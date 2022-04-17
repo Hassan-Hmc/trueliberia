@@ -21,6 +21,7 @@ import MyCarousel from './slider'
 import ContentLoader, { Rect, Circle, Path } from "react-content-loader/native"
 import se from '../screen/image/search.png'
 import { set } from 'react-native-reanimated';
+import { useIsFocused } from '@react-navigation/native';
 
 const Drawer = (props) => {
 
@@ -74,6 +75,11 @@ const Drawer = (props) => {
                   News
               </Text>
           </TouchableOpacity>
+          <TouchableOpacity onPress={()=>props.props.navigation.navigate('link')} activeOpacity={0.7}>
+             <Text style={{fontSize:20,fontWeight:'400',color:'#fff',marginTop:25}}>
+                 Link
+             </Text>
+         </TouchableOpacity>
  
       </View>
   </SafeAreaView>
@@ -99,7 +105,11 @@ const Search = (props) => {
   const [type, settype] = useState()
   const [cond, setcond] = useState(20)
   const [data, setdata] = useState(false)
+  const isFocused = useIsFocused();
 
+  useEffect(()=>{
+    setDrawerOpen(false)
+  },[props,isFocused])
 
   const [refreshing, setRefreshing] = useState(false)
   const _onRefresh1 = () => {
@@ -194,10 +204,7 @@ const [sug, setsug] = useState(true)
     <SafeAreaProvider>
      <Drawer props={props} open={openDrawer} toggleDrawer={toggleDrawer}>
          <SafeAreaView style={styles.safeArea}>
-             <ScrollView  refreshControl={
-  <RefreshControl refreshing={refreshing}
-    onRefresh={_onRefresh1}tintColor="#F8852D"/>
-}>
+             <ScrollView  >
 
                  <View style={styles.container}>
                      <View style={styles.nav}>
@@ -248,6 +255,18 @@ const [sug, setsug] = useState(true)
 
                  </View>
 
+
+
+
+
+
+          
+
+                
+
+
+
+
 {sug?
 
 <View style={{display:'flex',flexDirection:'column',width:'100%',marginTop:'4%'}}>
@@ -268,6 +287,32 @@ const [sug, setsug] = useState(true)
 :
 <View></View>
 }
+
+
+
+
+
+
+{sug
+?
+
+
+<View style={{width:'100%',display:'flex',alignItems:'flex-start',justifyContent:'center',marginTop:70,height:330}}>
+                     <Text style={{fontSize:14,fontWeight:'bold',color:'#00296B',marginBottom:-10,marginLeft:'5%'}}>
+                     Featured business:
+
+                     </Text>
+
+                     <MyCarousel props={props} />
+
+                 </View>
+
+
+:
+<View></View>
+}
+
+
 
                  <View style={{width:'100%',display:'flex',alignItems:'flex-start',justifyContent:'center',marginTop:10}}>
                      <Text style={{fontSize:14,fontWeight:'bold',color:'#00296B',marginBottom:0,marginLeft:'5%'}}>
@@ -332,9 +377,16 @@ const [sug, setsug] = useState(true)
                             </View>
                             :
                             
+                            sug
+                              ?
+                              <View>
+
+                              </View>
+                              :
                             <View style={{width:'100%',height:windowHeight-150,display:'flex',justifyContent:'center',alignItems:'center'}}><Text style={{color:'black',fontWeight:'bold',fontSize:15}}>No Result Found !</Text>
                           
                             </View>
+                            
                      }
 
 

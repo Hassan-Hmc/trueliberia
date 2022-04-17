@@ -10,7 +10,9 @@ import {
   TextInput,
   View,
   Image,
-  ImageBackground
+  ImageBackground,
+  Linking
+
 } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import MenuDrawer from 'react-native-side-drawer'
@@ -18,9 +20,11 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import MyCarouselitem from './itemDetailsSlider'
 import ReadMore from '@fawazahmed/react-native-read-more';
 import ContentLoader, { Rect, Circle, Path } from "react-content-loader/native"
+import Icon2 from 'react-native-vector-icons/FontAwesome5';
+import { useIsFocused } from '@react-navigation/native';
 
 const Drawer = (props) => {
-console.log(props);
+// console.log(props);
 
   const overlay = false
   const position = 'left'
@@ -72,6 +76,11 @@ console.log(props);
                   News
               </Text>
           </TouchableOpacity>
+          <TouchableOpacity onPress={()=>props.props.navigation.navigate('link')} activeOpacity={0.7}>
+             <Text style={{fontSize:20,fontWeight:'400',color:'#fff',marginTop:25}}>
+                 Link
+             </Text>
+         </TouchableOpacity>
  
       </View>
   </SafeAreaView>
@@ -95,14 +104,18 @@ const item_Details = (props) => {
   const [openDrawer, setDrawerOpen] = useState(false)
   const [detail, setdetail] = useState(false)
   const [detail_data, setdetail_data] = useState()
+  const isFocused = useIsFocused();
 
+  useEffect(()=>{
+    setDrawerOpen(false)
+  },[props,isFocused])
 
   const toggleDrawer = () => {
     setDrawerOpen(!openDrawer)
   }
 const  data = props.route.params.data
   useEffect(()=>{
-    console.log("awais>>>>>>>>>>>>>>>>>>>",data);
+    // console.log("awais>>>>>>>>>>>>>>>>>>>",data);
     // fetch  keyword data
    
   fetch(`https://www.trueliberia.com/api/business/${data.code}`,{
@@ -195,8 +208,93 @@ const  data = props.route.params.data
                                data.description
                               }
                          </ReadMore>
+
+
+                         <View style={{width:'100%',display:'flex',alignItems:'center',justifyContent:'center'}}>
+
+<View style={{width:'100%',height:50,display:'flex',alignItems:'center',flexDirection:'row',padding:2}}>
+<Icon style={{width:25}} name="map-marker-alt" size={19} color="#000" />
+<Text style={{marginLeft:10,color:'#6B6B6B'}}>
+{detail_data.address}
+</Text>
+</View>
+
+
+
+<View style={{width:'100%',height:50,display:'flex',alignItems:'center',flexDirection:'row',padding:1}}>
+
+<Icon style={{width:25,transform: [{ rotate: '90deg'}]}} name="phone" size={19} color="#000" />
+  <TouchableOpacity onPress={()=>{Linking.openURL(`tel:${detail_data.contact.phone}`)}}>
+<Text style={{marginLeft:10,color:'#6B6B6B'}}>
+{detail_data.contact.phone}
+
+</Text>
+  </TouchableOpacity>
+</View>
+
+
+
+
+<View style={{width:'100%',height:50,display:'flex',alignItems:'center',flexDirection:'row',padding:2}}>
+<Icon style={{width:30}} name="envelope" size={19} color="#000" />
+<TouchableOpacity onPress={()=>{Linking.openURL(`mailto:${detail_data.contact.email}`)}}>
+
+
+<Text style={{marginLeft:10,color:'#6B6B6B'}}>
+{detail_data.contact.email}</Text>
+</TouchableOpacity>
+</View>
+
+
+
+
+<View style={{width:'100%',height:50,display:'flex',alignItems:'center',flexDirection:'row',padding:2}}>
+<Icon  style={{width:30}} name="globe" size={19} color="#000" />
+<TouchableOpacity onPress={()=>{Linking.openURL(detail_data.contact.website)}}>
+
+<Text style={{marginLeft:10,color:'#6B6B6B'}}>
+{detail_data.contact.website}</Text>
+</TouchableOpacity>
+</View>
+
+
+
+
+<View style={{width:'100%',display:'flex',alignItems:'flex-start',flexDirection:'row',padding:2,marginTop:5}}>
+<Icon  style={{width:30}} name="clock" size={20} color="#000" />
+<View style={{marginLeft:10}}>
+{detail_data.opening_hours.map((v,i)=>{
+  return(
+<View key={i} style={{display:'flex',flexDirection:'row',width:'100%'}}>
+<View style={{ width:'42%'}}>
+
+<Text key={i} style={{fontSize:15,color:'#6B6B6B'}}>{v.day}       </Text>
+</View>
+<View >
+
+<Text style={{color:'#545454',textAlign:'left'}}>{v.from}-{v.to}</Text>
+</View>
+</View>
+
+  )
+})}
+
+
+</View>
+</View>
+
+
+
+
+
+
+
+                        </View>
+
+
+
                          <View style={{width:'100%',height:150}}>
-                             <Text style={{fontSize:16,color:'#000',fontWeight:'500'}}>
+                             <Text style={{fontSize:16,color:'#000',fontWeight:'500',marginTop:'4%'}}>
                                  Features & Animations
                              </Text>
 
@@ -226,7 +324,7 @@ const  data = props.route.params.data
 :
   
 <View  style={{width:'100%',display:'flex',justifyContent:'center',alignItems:'center',flexDirection:'column'}}>
-{console.log("gh>>>")}
+{/* {console.log("gh>>>")} */}
                             <ContentLoader height="280" width="90%"  >
                             
                             <Rect x="15" y="15" rx="6" ry="6" width="350" height="25" />

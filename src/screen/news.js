@@ -21,6 +21,7 @@ import MyCarousel from './slider'
 import ContentLoader, { Rect, Circle, Path } from "react-content-loader/native"
 import se from '../screen/image/search.png'
 import { set } from 'react-native-reanimated';
+import { useIsFocused } from '@react-navigation/native';
 
 const Drawer = (props) => {
 
@@ -74,6 +75,11 @@ const Drawer = (props) => {
                   News
               </Text>
           </TouchableOpacity>
+          <TouchableOpacity onPress={()=>props.props.navigation.navigate('link')} activeOpacity={0.7}>
+             <Text style={{fontSize:20,fontWeight:'400',color:'#fff',marginTop:25}}>
+                 Link
+             </Text>
+         </TouchableOpacity>
  
       </View>
   </SafeAreaView>
@@ -99,8 +105,11 @@ const News = (props) => {
   const [type, settype] = useState()
   const [cond, setcond] = useState(20)
   const [data, setdata] = useState(false)
+  const isFocused = useIsFocused();
 
-
+  useEffect(()=>{
+    setDrawerOpen(false)
+  },[props,isFocused])
   const [refreshing, setRefreshing] = useState(false)
   const _onRefresh1 = () => {
     setRefreshing(true);

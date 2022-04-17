@@ -12,7 +12,8 @@ import {
   Image,
   ImageBackground,
   RefreshControl,
-  Dimensions
+  Dimensions,
+  Linking
 } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import MenuDrawer from 'react-native-side-drawer'
@@ -75,11 +76,6 @@ const Drawer = (props) => {
                   News
               </Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={()=>props.props.navigation.navigate('link')} activeOpacity={0.7}>
-             <Text style={{fontSize:20,fontWeight:'400',color:'#fff',marginTop:25}}>
-                 Link
-             </Text>
-         </TouchableOpacity>
  
       </View>
   </SafeAreaView>
@@ -99,7 +95,7 @@ const Drawer = (props) => {
     </MenuDrawer>
   );
 }
-const Promos = (props) => {
+const Link = (props) => {
   const [openDrawer, setDrawerOpen] = useState(false)
   const [cat_data, setcat_data] = useState([])
   const [type, settype] = useState()
@@ -202,10 +198,7 @@ const fetch_keyword_data= async(v)=>{
     <SafeAreaProvider>
      <Drawer props={props} open={openDrawer} toggleDrawer={toggleDrawer}>
          <SafeAreaView style={styles.safeArea}>
-             <ScrollView  refreshControl={
-  <RefreshControl refreshing={refreshing}
-    onRefresh={_onRefresh1}tintColor="#F8852D"/>
-}>
+             <ScrollView  >
 
                  <View style={styles.container}>
                      <View style={styles.nav}>
@@ -215,134 +208,48 @@ const fetch_keyword_data= async(v)=>{
                          </TouchableOpacity>
 
 
-                         <Text style={{fontSize:20,fontWeight:'bold',color:'#202020'}}>
+                         {/* <Text style={{fontSize:20,fontWeight:'bold',color:'#202020'}}>
                              Trueliberia
-                         </Text>
+                         </Text> */}
 
-
+{/* 
                          <TouchableOpacity onPress={()=>toggleDrawer()}>
                              <Icon name="bars" size={26} color="#202020" />
 
-                         </TouchableOpacity>
+                         </TouchableOpacity> */}
+
                      </View>
-
-                     <View style={styles.searchSection}>
-                         <Icon style={styles.searchIcon} name="map-marker-alt" size={20} color="#000" />
-                         <TextInput   onChangeText={(e)=>{settype(e)}}  style={styles.input} placeholder="Search here...."
-                             // underlineColorAndroid="transparent"
-                             />
-                             <TouchableOpacity style={{}} onPress={()=>{        search_data()
-                                                }}>
-
-                               <Image resizeMode='contain' style={{width:19,height:40,}} source={se} >
-
-</Image>
-                                 {/* <Text style={{color:'black'}}>njk</Text> */}
-                             </TouchableOpacity>
-                     </View>
-                     <View style={{width:'80%',marginTop:10}}>
-                         {search.length>0 && searchTrue?
-                         myitems.map((v,i)=>{
-                         if(i<7){ return( <View style={{width:'90%',paddingLeft:'10%',height:40,backgroundColor:'#fff',display:'flex',alignItems:'flex-start',justifyContent:'center',marginTop:0}} key={i} onTouchEnd={()=>{setSearch(v.name); setSearchTrue(false)}}>
-
-                             <Text style={{fontWeight:'bold',color:'#00296B'}}>
-                                 {v.name}
-                             </Text>
-                     </View>
-                     )
-                     }
-                     }):
-                     null}
-
-                 </View>
-
-
-
-
-
-                 <View style={{width:'100%',display:'flex',alignItems:'flex-start',justifyContent:'center',marginTop:10}}>
-                     <Text style={{fontSize:14,fontWeight:'bold',color:'#00296B',marginBottom:0,marginLeft:'5%'}}>
-                         {/* Catagories result for  */}
-                     </Text>
-                      {data==true?
-                      cat_data.length>0?
-                      cat_data.map((v,i)=>{
-                        if(i<cond)
-                        {
-                          
-                          return(
-                            
-                              <View key={i}  style={styles.card2}>
-                         <TouchableOpacity onPress={()=>{props.navigation.navigate('itemDetails',{data:v})}} activeOpacity={0.7}>
-                             <Image style={{width:'100%',height:160,resizeMode:'cover',borderTopLeftRadius:10,borderTopRightRadius:10}} source={{uri:v.image}}>
-
-                             </Image>
-                             <View style={{width:'100%',height:60,display:'flex',alignItems:'center',justifyContent:'space-between',flexDirection:'row',paddingHorizontal:10}}>
-                                 <View>
-                                     <Text style={{fontSize:14,fontWeight:'bold',color:'#00296B'}}>
-                                     {v.name}
-                                     </Text>
-                                     <Text style={{fontSize:12,color:'grey'}}>
-                                     {v.slug}
-                                     </Text>
-                                 </View>
-                                 <View>
-                                     <Text style={{fontWeight:'bold',color:'#1FDB5F',fontSize:15}}>{v.rating}</Text>
-                                 </View>
-                             </View>
-                         </TouchableOpacity>
-                     </View>
-                         )
-                          }
-                     }):
-                     
-                     <View  style={{width:'100%',display:'flex',justifyContent:'center',alignItems:'center',flexDirection:'column'}}>
-                            <ContentLoader height="280" width="90%"  >
-                            
-                            <Rect x="15" y="15" rx="6" ry="6" width="350" height="25" />
-                          
-                            <Rect x="15" y="50" rx="2" ry="2" width="350" height="150" />
-
-                          </ContentLoader>
-                          <ContentLoader height="280" width="90%"  >
-                            
-                            <Rect x="15" y="15" rx="6" ry="6" width="350" height="25" />
-                          
-                            <Rect x="15" y="50" rx="2" ry="2" width="350" height="150" />
-
-                          </ContentLoader>
-                          <ContentLoader height="280" width="90%"  >
-                            
-                            <Rect x="15" y="15" rx="6" ry="6" width="350" height="25" />
-                          
-                            <Rect x="15" y="50" rx="2" ry="2" width="350" height="150" />
-
-                          </ContentLoader>
-                            </View>
-                            :
-                            <View style={{width:'100%',height:windowHeight-150,display:'flex',justifyContent:'center',alignItems:'center'}}><Text style={{color:'black',fontWeight:'bold',fontSize:15}}>No Result Found !</Text></View>
-                     }
-
-
-
-
 
                     
 
 
 
 
-                 </View>
 
+<View style={{backgroundColor:'white',display:'flex',justifyContent:'center',alignItems:'center',marginTop:'50%',flexDirection:'column',width:'100%'}}>
 
-{data==true?
-                 <TouchableOpacity onPress={()=>{setcond(cond+10)}} style={{backgroundColor:'#326EC6',width:'30%',display:'flex',justifyContent:'center',alignItems:'center',borderRadius:2,marginBottom:15,height:28,marginTop:9}}>
-<Text style={{color:'black',fontWeight:'bold',fontSize:15,color:'white'}}>Load More</Text>
-</TouchableOpacity>
-:
-console.log(data)
+                       <Text style={{color:'black',fontWeight:'bold',fontSize:20}}>Our Links</Text>
 
-}
+                       <Text style={{color:'black',fontSize:15,width:'70%',textAlign:'center',marginTop:'10%'}}>Sumbitting your business to our app is free.All you have to do is click on link below.</Text>
+
+                       <TouchableOpacity style={{backgroundColor:'#17132D',width:'60%',textAlign:'center',height:32,marginTop:'4%'}}onPress={()=>{
+                        Linking.canOpenURL('https://www.trueliberia.com/submission').then(supported => {
+                          if (supported) {
+                            Linking.openURL('https://www.trueliberia.com/submission');
+                          } else {
+                            console.log("Don't know how to open URI: " + this.props.url);
+                          }
+                        });
+                       }}>
+
+                        <Text style={{color:'white',textAlign:'center',fontSize:16,marginTop:4}}>
+                          Sumbit Your Business
+                        </Text>
+
+                       </TouchableOpacity>
+
+</View>
+
 
                  </View>
              </ScrollView>
@@ -355,7 +262,8 @@ console.log(data)
 
 const styles = StyleSheet.create({
   safeArea: {
-    flex: 1
+    flex: 1,
+    backgroundColor:'white'
   },
   container: {
     flex: 1,
@@ -453,4 +361,4 @@ card2:{
   backgroundColor:'rgba(255, 255, 255, 0.438)',}
 });
 
-export default Promos;
+export default Link;
